@@ -8,6 +8,10 @@ import SportsGrid from "./Components/SportsGrid.jsx";
 import Profile from "./Components/Profile.jsx";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
 
+import FAQ from "./Components/FAQ.jsx";
+
+
+
 function App() {
   useEffect(() => {
     enableSmoothNavLinks();
@@ -34,6 +38,8 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/faq" element={<FAQ />} />
+
       </Routes>
     </div>
   );

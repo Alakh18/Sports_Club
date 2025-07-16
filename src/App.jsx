@@ -1,23 +1,40 @@
-import React from 'react';
-import './index.css';
-import Header from './Components/Header.jsx';
-import HeroSection from './Components/HeroSection.jsx';
-import SportsGrid from './Components/SportsGrid.jsx';
-// import AboutSection from './components/AboutSection';
-// import EventsSection from './components/EventsSection';
-// import JoinUsSection from './components/JoinUsSection';
-// import Footer from './components/Footer';
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import { enableSmoothNavLinks } from "./utils/ui";
+
+import Header from "./Components/Header.jsx";
+import HeroSection from "./Components/HeroSection.jsx";
+import SportsGrid from "./Components/SportsGrid.jsx";
+import Profile from "./Components/Profile.jsx";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
 
 function App() {
-  return (
-    <div className="App">
+  useEffect(() => {
+    enableSmoothNavLinks();
+  }, []);
+
+  const Home = () => (
+    <>
       <Header />
       <HeroSection />
       <SportsGrid />
-      {/*<AboutSection />
-      <EventsSection />
-      <JoinUsSection />
-      <Footer /> */}
+      {/* Add other sections like AboutSection, Events, Footer here */}
+    </>
+  );
+
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </div>
   );
 }

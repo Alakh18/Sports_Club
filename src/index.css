@@ -1,31 +1,39 @@
 :root {
-  --primary: #0D1B2A;
-  --accent: #FFD700;
-  --secondary: #D72638;
-  --background: #F5F5F5;
-  --text-light: #FFFFFF;
-  --text-dark: #1C1C1C;
+  --primary: #0d1b2a;
+  --accent: #ffd700;
+  --secondary: #d72638;
+  --background: #f5f5f5;
+  --text-light: #ffffff;
+  --text-dark: #1c1c1c;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: var(--background);
   color: var(--text-dark);
 }
 
-h1, h2, h3, .section-heading {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
+h1,
+h2,
+h3,
+.section-heading {
+  font-family: "Bebas Neue", sans-serif;
   color: var(--primary);
+  letter-spacing: 1px;
 }
 
 a {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
 }
 
-button, .cta {
+button,
+.cta {
   background-color: var(--accent);
   color: var(--text-dark);
   font-weight: 600;
@@ -36,12 +44,13 @@ button, .cta {
   transition: all 0.3s ease;
 }
 
-button:hover, .cta:hover {
+button:hover,
+.cta:hover {
   background-color: var(--secondary);
   color: var(--text-light);
 }
 
-/* HEADER STYLING */
+/* Header */
 .header {
   background-color: var(--primary);
   color: var(--text-light);
@@ -64,10 +73,7 @@ button:hover, .cta:hover {
 
 .header__logo {
   font-size: 1.8rem;
-  font-weight: bold;
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 1px;
-  white-space: nowrap;
+  font-family: "Bebas Neue", sans-serif;
 }
 
 .header__nav {
@@ -76,10 +82,8 @@ button:hover, .cta:hover {
 }
 
 .header__nav-link {
-  text-decoration: none;
   color: var(--text-light);
   font-weight: 500;
-  transition: color 0.3s;
 }
 
 .header__nav-link:hover {
@@ -88,52 +92,38 @@ button:hover, .cta:hover {
 
 .header__toggle-button {
   display: none;
-  font-size: 1.8rem;
   background: none;
   border: none;
+  font-size: 1.8rem;
   color: var(--accent);
   cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s;
 }
 
 .header__toggle-button:hover {
   background-color: rgba(255, 215, 0, 0.1);
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .header__toggle-button {
     display: block;
   }
-
   .header__nav {
     display: none;
     position: absolute;
     top: 70px;
     right: 30px;
-    background-color: var(--primary);
+    background: var(--primary);
     flex-direction: column;
     align-items: flex-end;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   }
-
   .header__nav--open {
     display: flex;
   }
 }
 
-/* LOGIN SECTION */
-.cta.small {
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  margin-left: 10px;
-}
-
-/* Modal styling */
+/* Auth Modal */
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -148,28 +138,52 @@ button:hover, .cta:hover {
 }
 
 .auth-modal {
-  background: white;
+  background: #fff;
   color: var(--text-dark);
   padding: 30px;
   border-radius: 12px;
-  width: 90%;
   max-width: 400px;
-  position: relative;
+  width: 90%;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  animation: popFade 0.4s ease;
+  position: relative;
+}
+
+@keyframes popFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .auth-modal h2 {
-  margin-bottom: 20px;
+  text-align: center;
   color: var(--primary);
+  margin-bottom: 20px;
 }
 
 .auth-modal input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+}
+
+.auth-modal input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.cta.small {
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  margin-left: 10px;
 }
 
 .cta.full {
@@ -187,52 +201,185 @@ button:hover, .cta:hover {
   cursor: pointer;
 }
 
+.close-btn:hover {
+  color: var(--primary);
+}
 
+.form-error {
+  color: var(--secondary);
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: center;
+}
 
-/* HERO SECTION */
+/* Profile */
+.profile-section {
+  background: #fff;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-form label {
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form input,
+.profile-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.profile-form textarea {
+  resize: vertical;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+button.danger {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+button.danger:hover {
+  background-color: #b21e2c;
+}
+
+.profile-image img,
+.image-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.image-placeholder {
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+  position: relative;
+  margin-left: 10px;
+}
+
+.profile-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+.profile-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: rgba(13, 27, 42, 0.05);
+}
+
+/* Hero Section */
 .hero.bright-hero {
-  background-color: #fefae0; /* soft off-white yellow */
+  background: #fefae0;
   padding: 40px 20px;
+  min-height: 40vh;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40vh;
-  border-bottom: 2px solid var(--accent); /* adds a soft transition divider */
 }
 
 .hero__content {
   max-width: 700px;
-  margin: 0 auto;
+  margin: auto;
 }
 
 .hero__title {
   font-size: 2.4rem;
-  margin-bottom: 0.8rem;
   color: var(--primary);
 }
 
 .hero__subtitle {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #444;
-  margin-bottom: 1.5rem;
 }
 
 @media (max-width: 768px) {
   .hero__title {
     font-size: 1.8rem;
   }
-
   .hero__subtitle {
     font-size: 0.95rem;
   }
 }
 
-
-/* SPORTS GRID */
+/* Sports Grid */
 .sports-grid {
   padding: 60px 30px;
-  background-color: var(--background);
   text-align: center;
 }
 
@@ -245,11 +392,11 @@ button:hover, .cta:hover {
 }
 
 .sport-card {
-  background-color: var(--text-light);
-  border-radius: 12px;
+  background: white;
   padding: 30px 20px;
+  border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .sport-card:hover {
@@ -258,14 +405,13 @@ button:hover, .cta:hover {
 }
 
 .sport-card__icon {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
 .sport-card__title {
   color: var(--primary);
-  font-size: 1.4rem;
-  margin-bottom: 10px;
+  font-size: 1.3rem;
 }
 
 .sport-card__description {

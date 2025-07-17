@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./SportsGrid.css";
 
 const sports = [
@@ -32,7 +33,6 @@ const sports = [
     icon: "🏸",
     description: "Fast-paced rallies and powerful smashes.",
   },
-  
 ];
 
 function SportsGrid() {
@@ -71,30 +71,36 @@ function SportsGrid() {
           const videoPath = `/videos/${sport.name.toLowerCase()}.mp4`;
 
           return (
-            <div
-              className="sport-card"
+            <Link
+              to={`/sports/${sport.name.toLowerCase()}`}
               key={sport.name}
-              ref={(el) => (videoRefs.current[index] = el)}
+              className="sport-card-link"
             >
-              <video
-                className="sport-video"
-                muted
-                loop
-                playsInline
-                preload="auto"
+              <div
+                className="sport-card"
+                key={sport.name}
+                ref={(el) => (videoRefs.current[index] = el)}
               >
-                <source src={videoPath} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+                <video
+                  className="sport-video"
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                >
+                  <source src={videoPath} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
 
-              <div className="sport-content">
-                <div className="sport-icon" aria-label={sport.name}>
-                  {sport.icon}
+                <div className="sport-content">
+                  <div className="sport-icon" aria-label={sport.name}>
+                    {sport.icon}
+                  </div>
+                  <h3 className="sport-title">{sport.name}</h3>
+                  <p className="sport-description">{sport.description}</p>
                 </div>
-                <h3 className="sport-title">{sport.name}</h3>
-                <p className="sport-description">{sport.description}</p>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

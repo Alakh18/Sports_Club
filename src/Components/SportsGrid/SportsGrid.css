@@ -1,5 +1,6 @@
 .sports-grid {
-  padding: 60px 20px;
+  padding: 10px;
+  padding-bottom: 100px;
   text-align: center;
   background: linear-gradient(to bottom right, #fffaf0, #fef3c7); 
 
@@ -34,10 +35,9 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-
 .sport-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(255, 251, 0, 0.767);
 }
 
 .sport-video {

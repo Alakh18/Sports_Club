@@ -20,6 +20,14 @@ function Header() {
     }, 100);
   };
 
+  const goToSports = () => {
+    navigate("/");
+    setTimeout(() => {
+      const sportsSection = document.getElementById("sports");
+      sportsSection?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = () => {
@@ -70,9 +78,13 @@ function Header() {
               About
             </a>
             <a
-              href="#sports-grid"
+              href=""
               className="header__nav-link"
-              onClick={closeMenu}
+              onClick={(e) => {
+                e.preventDefault();
+                goToSports();
+                closeMenu();
+              }}
             >
               Sports
             </a>
@@ -85,9 +97,9 @@ function Header() {
             <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
             </a>
-            <a className="header__nav-link">
-              <Link to="/faq">FAQ</Link>
-            </a>
+            <Link to="/faq" className="header__nav-link">
+              FAQ
+            </Link>
 
             {!user ? (
               <>

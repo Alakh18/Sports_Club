@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 
 function Footer() {
   const scrollToTop = () => {
@@ -11,22 +10,20 @@ function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const goToHero = () => {
+  function goTo(id) {
     if (location.pathname === "/") {
-      const hero = document.getElementById("hero");
-      if (hero) {
-        hero.scrollIntoView({ behavior: "smooth" });
+      const elementID = document.getElementById(id);
+      if (elementID) {
+        elementID.scrollIntoView({ behavior: "smooth" });
       }
     } else {
       navigate("/");
-
-      // Wait for navigation to complete, then scroll
       setTimeout(() => {
-        const hero = document.getElementById("hero");
-        hero?.scrollIntoView({ behavior: "smooth" });
-      }, 300); // Adjust timing if needed
+        const elementID = document.getElementById(id);
+        elementID?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
     }
-  };
+  }
 
   return (
     <footer className="footer">
@@ -34,9 +31,9 @@ function Footer() {
         <div className="footer__logo">🏆 SVNIT Sports Club</div>
 
         <nav className="footer__nav">
-          <a onClick={goToHero}>Home</a>
+          <a onClick={() => goTo("hero")}>Home</a>
           <a href="#about">About</a>
-          <a href="#sports-grid">Sports</a>
+          <a onClick={() => goTo("sports")}>Sports</a>
           <a href="#events">Events</a>
           <a href="#gallery">Gallery</a>
           <a href="#contact">Contact</a>

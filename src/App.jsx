@@ -14,6 +14,11 @@ import Footer from "./Components/Footer/Footer.jsx";
 
 function App() {
   useEffect(() => {
+  fetch('/api/message')
+    .then((res) => res.json())
+    .then((data) => console.log(data.message)); 
+  }, []);
+  useEffect(() => {
     enableSmoothNavLinks();
   }, []);
 

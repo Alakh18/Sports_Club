@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import "./SportsGrid.css";
 
 const sports = [
@@ -31,25 +32,71 @@ const sports = [
     icon: "🏸",
     description: "Fast-paced rallies and powerful smashes.",
   },
-  {
-    name: "Tennis",
-    icon: "🎾",
-    description: "Ace your serve and play singles or doubles.",
-  },
+  
 ];
 
 function SportsGrid() {
+  const videoRefs = useRef([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target.querySelector("video");
+          if (video) {
+            video.playbackRate = 1.5;
+            if (entry.isIntersecting) {
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    videoRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="sports" className="sports-grid">
       <h2 className="section-heading">Explore Our Sports</h2>
       <div className="sports-grid__container">
-        {sports.map((sport) => (
-          <div className="sport-card" key={sport.name}>
-            <div className="sport-card__icon">{sport.icon}</div>
-            <h3 className="sport-card__title">{sport.name}</h3>
-            <p className="sport-card__description">{sport.description}</p>
-          </div>
-        ))}
+        {sports.map((sport, index) => {
+          const videoPath = `/videos/${sport.name.toLowerCase()}.mp4`;
+
+          return (
+            <div
+              className="sport-card"
+              key={sport.name}
+              ref={(el) => (videoRefs.current[index] = el)}
+            >
+              <video
+                className="sport-video"
+                muted
+                loop
+                playsInline
+                preload="auto"
+              >
+                <source src={videoPath} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              <div className="sport-content">
+                <div className="sport-icon" aria-label={sport.name}>
+                  {sport.icon}
+                </div>
+                <h3 className="sport-title">{sport.name}</h3>
+                <p className="sport-description">{sport.description}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

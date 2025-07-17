@@ -1,0 +1,175 @@
+/* src/components/FAQ.css */
+
+.faq-container {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 0 20px;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.faq-title {
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  color: var(--primary);
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+  padding-top: 30px;
+}
+
+/* FAQ Cards */
+.faq-item {
+  background-color: #fffef5; /* light yellow-beige */
+  border: 1px solid #eaeaea;
+  border-left: 5px solid var(--accent);
+  border-radius: 10px;
+  margin: 20px 0;
+  padding: 22px 26px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  background-color: #fffbe6;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.faq-toggle {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  margin-top: 14px;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
+  transition: all 0.3s ease;
+}
+
+/* Fade In Animation */
+.faq-answer {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .faq-title {
+    font-size: 2rem;
+  }
+
+  .faq-question {
+    font-size: 1rem;
+  }
+
+  .faq-answer {
+    font-size: 0.95rem;
+  }
+}
+
+.faq-main-heading {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.6rem;
+  text-align: center;
+  margin-top: 40px;
+  letter-spacing: 2px;
+  font-weight: 700;
+
+  background: linear-gradient(to right, #D72638, #FFD700); /* Red to Gold */
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+/* Subtitle */
+.faq-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 700px;
+  margin: 10px auto 30px auto;
+  font-weight: 500;
+}
+
+/* Header Row */
+.faq-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* This aligns expand button vertically */
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+/* Title (left side of the header row) */
+.faq-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: var(--primary);
+  margin: 0;
+}
+
+/* Expand All Button */
+.expand-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  font-weight: 600;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.expand-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .faq-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .expand-btn {
+    align-self: flex-end;
+  }
+}
+

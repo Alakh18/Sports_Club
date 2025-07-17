@@ -145,20 +145,19 @@
 
 /* Expand All Button */
 .expand-btn {
-  background-color: var(--secondary);
-  color: var(--text-light);
-  padding: 12px 22px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
+  background-color: var(--accent);
+  color: var(--text-dark);
   font-weight: 600;
-  transition: background-color 0.3s ease;
-  margin-top: 10px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .expand-btn:hover {
-  background-color: yellow;
+  background-color: var(--secondary);
+  color: var(--text-light);
 }
 
 /* Responsive Adjustments */

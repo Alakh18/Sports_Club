@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../context/usercontext";
-import { enableEscapeKey } from "../utils/ui";
+import { useUser } from "../../context/usercontext";
+import { enableEscapeKey } from "../../utils/ui";
 import { useNavigate } from "react-router-dom";
+import "./AuthModal.css";
 
 function AuthModal({ type = "login", onClose }) {
   const { login } = useUser();

@@ -1,8 +1,5 @@
-// src/components/FAQ.js
-import React, { useState } from 'react';
-import './FAQ.css';
-//import Header from '../Components/Header';
-
+import React, { useState } from "react";
+import "./FAQ.css";
 
 const faqData = [
   {
@@ -67,31 +64,40 @@ const FAQ = () => {
   };
 
   return (
-    <div className="faq-container">
-      <h1 className="faq-main-heading">FAQ</h1>
-      <p className="faq-subtitle">Find answers to common questions about our sports club, Inter-NIT, and more.</p>
+    <>
+      <div className="faq-container">
+        <h1 className="faq-main-heading">FAQ</h1>
+        <p className="faq-subtitle">
+          Find answers to common questions about our sports club, Inter-NIT, and
+          more.
+        </p>
 
-      <div className="faq-header-row">
-        <h2 className="faq-title">Frequently Asked Questions</h2>
-        <button className="expand-btn" onClick={toggleAll}>
-          {allExpanded ? 'Collapse All' : 'Expand All'}
-        </button>
-      </div>
-
-      {faqData.map((faq, index) => (
-        <div className="faq-item" key={index} onClick={() => toggleFAQ(index)}>
-          <div className="faq-question">
-            {faq.question}
-            <span className="faq-toggle">
-              {openIndexes.includes(index) ? '−' : '+'}
-            </span>
-          </div>
-          {openIndexes.includes(index) && (
-            <div className="faq-answer">{faq.answer}</div>
-          )}
+        <div className="faq-header-row">
+          <h2 className="faq-title">Frequently Asked Questions</h2>
+          <button className="expand-btn" onClick={toggleAll}>
+            {allExpanded ? "Collapse All" : "Expand All"}
+          </button>
         </div>
-      ))}
-    </div>
+
+        {faqData.map((faq, index) => (
+          <div
+            className="faq-item"
+            key={index}
+            onClick={() => toggleFAQ(index)}
+          >
+            <div className="faq-question">
+              {faq.question}
+              <span className="faq-toggle">
+                {openIndexes.includes(index) ? "−" : "+"}
+              </span>
+            </div>
+            {openIndexes.includes(index) && (
+              <div className="faq-answer">{faq.answer}</div>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

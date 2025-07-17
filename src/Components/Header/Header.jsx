@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../context/usercontext.js";
-import AuthModal from "./AuthModal";
+import { useUser } from "../../context/usercontext.js";
+import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate } from "react-router-dom";
+import "./Header.css";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,6 +11,14 @@ function Header() {
   const dropdownRef = useRef(null);
   const { user, logout } = useUser();
   const navigate = useNavigate();
+
+  const goToHero = () => {
+    navigate("/");
+    setTimeout(() => {
+      const hero = document.getElementById("hero");
+      hero?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -51,8 +60,8 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
+                goToHero();
                 closeMenu();
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               Home
@@ -76,8 +85,9 @@ function Header() {
             <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
             </a>
-            <li><Link to="/faq">FAQ</Link></li>
-
+            <a className="header__nav-link">
+              <Link to="/faq">FAQ</Link>
+            </a>
 
             {!user ? (
               <>
@@ -110,10 +120,16 @@ function Header() {
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link to="/profile" onClick={() => setDropdownOpen(false)}>
+                    <Link
+                      to="/profile"
+                      className="dropdown-item"
+                      onClick={() => setDropdownOpen(false)}
+                    >
                       Update Profile
                     </Link>
-                    <button onClick={handleLogout}>Logout</button>
+                    <button onClick={handleLogout} className="dropdown-item">
+                      Logout
+                    </button>
                   </div>
                 )}
               </div>

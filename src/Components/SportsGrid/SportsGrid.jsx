@@ -1,4 +1,4 @@
-import React from "react";
+import "./SportsGrid.css";
 
 const sports = [
   {

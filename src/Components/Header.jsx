@@ -76,6 +76,8 @@ function Header() {
             <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
             </a>
+            <li><Link to="/faq">FAQ</Link></li>
+
 
             {!user ? (
               <>

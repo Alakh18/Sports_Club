@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { handleAboutClick, goTo } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -11,22 +12,7 @@ function Header() {
   const dropdownRef = useRef(null);
   const { user, logout } = useUser();
   const navigate = useNavigate();
-
-  const goToHero = () => {
-    navigate("/");
-    setTimeout(() => {
-      const hero = document.getElementById("hero");
-      hero?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
-
-  const goToSports = () => {
-    navigate("/");
-    setTimeout(() => {
-      const sportsSection = document.getElementById("sports");
-      sportsSection?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
+  const location = useLocation();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -48,33 +34,6 @@ function Header() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const location = useLocation();
-
-  const handleAboutClick = (target = "") => {
-    if (location.pathname.startsWith("/about")) {
-      // Already on About page
-      if (target === "contact") {
-        const el = document.getElementById("contact");
-        el?.scrollIntoView({ behavior: "smooth" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    } else {
-      // Navigate to About page and scroll after load
-      navigate("/about");
-
-      // Delay to ensure page renders before scrolling
-      setTimeout(() => {
-        if (target === "contact") {
-          const el = document.getElementById("contact");
-          el?.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-      }, 150);
-    }
-  };
-
   return (
     <>
       <header className="header" id="header">
@@ -95,7 +54,7 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goToHero();
+                goTo(navigate, location, "hero");
                 closeMenu();
               }}
             >
@@ -103,7 +62,7 @@ function Header() {
             </a>
             <Link
               to="/about"
-              onClick={handleAboutClick}
+              onClick={() => handleAboutClick(navigate, location)}
               className="header__nav-link"
             >
               About
@@ -113,7 +72,7 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goToSports();
+                goTo(navigate, location, "sports");
                 closeMenu();
               }}
             >
@@ -122,7 +81,7 @@ function Header() {
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => handleAboutClick("contact")}
+              onClick={() => handleAboutClick(navigate, location, "contact")}
             >
               Contact
             </Link>

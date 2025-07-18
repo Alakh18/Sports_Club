@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { enableSmoothNavLinks } from "./utils/ui";
 
 import Header from "./Components/Header/Header.jsx";
+import About from "./Components/About/About.jsx";
 import HeroSection from "./Components/HeroSection/HeroSection.jsx";
 import SportsGrid from "./Components/SportsGrid/SportsGrid.jsx";
 import Profile from "./Components/Profile/Profile.jsx";
@@ -38,6 +39,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/sports/:sportName" element={<Sports />} />
       </Routes>

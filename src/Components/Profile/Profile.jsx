@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import { useNavigate } from "react-router-dom";
-import "./Profile.css" 
+import "./Profile.css";
 
 function Profile() {
   const { user, login, logout } = useUser();
@@ -19,6 +19,7 @@ function Profile() {
   });
 
   const [toastVisible, setToastVisible] = useState(false);
+  const [submitContent, setSubmitContent] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -49,8 +50,9 @@ function Profile() {
 
     login({ ...user, ...formData });
 
-    // Show toast and navigate home after delay
+    setSubmitContent("✅ Profile saved successfully!");
     setToastVisible(true);
+
     setTimeout(() => {
       setToastVisible(false);
       navigate("/");
@@ -65,6 +67,17 @@ function Profile() {
       logout();
       navigate("/");
     }
+  };
+
+  const handleAdmin = (e) => {
+    e.preventDefault();
+    setSubmitContent(
+      "🛡️ Admin request sent successfully. Please wait for approval."
+    );
+    setToastVisible(true);
+    setTimeout(() => {
+      setToastVisible(false);
+    }, 2500);
   };
 
   return (
@@ -168,6 +181,7 @@ function Profile() {
           <button type="submit" className="cta full save-btn">
             Save Profile
           </button>
+
           <button
             type="button"
             className="cta full delete-btn"
@@ -175,11 +189,17 @@ function Profile() {
           >
             Delete Profile
           </button>
+
+          <button
+            type="button"
+            onClick={handleAdmin}
+            className="cta full save-btn"
+          >
+            Request Admin Access
+          </button>
         </form>
 
-        {toastVisible && (
-          <div className="profile-toast">✅ Profile saved successfully!</div>
-        )}
+        {toastVisible && <div className="profile-toast">{submitContent}</div>}
       </div>
     </>
   );

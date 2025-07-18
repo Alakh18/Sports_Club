@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Footer.css";
-import { useNavigate, useLocation } from "react-router-dom";
 
 function Footer() {
   const scrollToTop = () => {
@@ -25,6 +24,31 @@ function Footer() {
     }
   }
 
+  const handleAboutClick = (target = "") => {
+    if (location.pathname.startsWith("/about")) {
+      // Already on About page
+      if (target === "contact") {
+        const el = document.getElementById("contact");
+        el?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      // Navigate to About page and scroll after load
+      navigate("/about");
+
+      // Delay to ensure page renders before scrolling
+      setTimeout(() => {
+        if (target === "contact") {
+          const el = document.getElementById("contact");
+          el?.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 150);
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="footer__content">
@@ -32,11 +56,13 @@ function Footer() {
 
         <nav className="footer__nav">
           <a onClick={() => goTo("hero")}>Home</a>
-          <a href="#about">About</a>
+          <Link to="/about" onClick={handleAboutClick}>
+            About
+          </Link>
           <a onClick={() => goTo("sports")}>Sports</a>
-          <a href="#events">Events</a>
-          <a href="#gallery">Gallery</a>
-          <a href="#contact">Contact</a>
+          <Link to="/about" onClick={() => handleAboutClick("contact")}>
+            Contact
+          </Link>
           <Link to="/faq">FAQ</Link>
         </nav>
 

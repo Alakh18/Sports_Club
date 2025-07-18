@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import AuthModal from "../AuthModal/AuthModal.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
@@ -48,6 +48,33 @@ function Header() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  const location = useLocation();
+
+  const handleAboutClick = (target = "") => {
+    if (location.pathname.startsWith("/about")) {
+      // Already on About page
+      if (target === "contact") {
+        const el = document.getElementById("contact");
+        el?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      // Navigate to About page and scroll after load
+      navigate("/about");
+
+      // Delay to ensure page renders before scrolling
+      setTimeout(() => {
+        if (target === "contact") {
+          const el = document.getElementById("contact");
+          el?.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 150);
+    }
+  };
+
   return (
     <>
       <header className="header" id="header">
@@ -74,9 +101,13 @@ function Header() {
             >
               Home
             </a>
-            <a href="#about" className="header__nav-link" onClick={closeMenu}>
+            <Link
+              to="/about"
+              onClick={handleAboutClick}
+              className="header__nav-link"
+            >
               About
-            </a>
+            </Link>
             <a
               href=""
               className="header__nav-link"
@@ -88,15 +119,13 @@ function Header() {
             >
               Sports
             </a>
-            <a href="#events" className="header__nav-link" onClick={closeMenu}>
-              Events
-            </a>
-            <a href="#gallery" className="header__nav-link" onClick={closeMenu}>
-              Gallery
-            </a>
-            <a href="#contact" className="header__nav-link" onClick={closeMenu}>
+            <Link
+              to="/about"
+              className="header__nav-link"
+              onClick={() => handleAboutClick("contact")}
+            >
               Contact
-            </a>
+            </Link>
             <Link to="/faq" className="header__nav-link">
               FAQ
             </Link>

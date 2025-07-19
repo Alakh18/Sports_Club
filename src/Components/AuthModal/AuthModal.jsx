@@ -1,120 +1,90 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../context/usercontext";
-import { enableEscapeKey } from "../../utils/ui";
-import { useNavigate } from "react-router-dom";
-import "./AuthModal.css";
+import React, { useState } from 'react';
+import { useUser } from '../../context/usercontext';
+import './AuthModal.css';
 
-function AuthModal({ type = "login", onClose }) {
-  const { login } = useUser();
-  const [admission, setAdmission] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+function AuthModal({ type, onClose }) {
+  const { login, signup } = useUser();
+  const [admission, setAdmission] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const cleanup = enableEscapeKey(onClose);
-    return cleanup;
-  }, [onClose]);
-
-  const validateEmail = (email) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
-    if (!admission.trim() || !password.trim()) {
-      setError("Admission number and password are required.");
-      return;
-    }
+    try {
+      let result;
+      if (type === 'login') {
+        result = await login(admission, password);
+      } else {
+        result = await signup(admission, email, password);
+      }
 
-    if (type === "signup") {
-      if (!validateEmail(email)) {
-        setError("Invalid email address.");
+      if (!result.success) {
+        setError(result.error);
         return;
       }
 
-      const existing = localStorage.getItem(`user_${admission}`);
-      if (existing) {
-        setError("User already exists. Please login.");
-        return;
-      }
-
-      const newUser = {
-        admission,
-        email,
-        password,
-        firstName: "",
-        lastName: "",
-        phone: "",
-        image: "",
-        achievements: "",
-      };
-
-      localStorage.setItem(`user_${admission}`, JSON.stringify(newUser));
-      login(newUser);
-      setError("");
       onClose();
-      navigate("/"); // ✅ Only after successful signup
-    } else {
-      const stored = localStorage.getItem(`user_${admission}`);
-      if (!stored) {
-        setError("User not found. Please sign up.");
-        return;
-      }
-
-      const user = JSON.parse(stored);
-      if (user.password !== password) {
-        setError("Incorrect password.");
-        return;
-      }
-
-      login(user);
-      setError("");
-      onClose();
-      navigate("/"); // ✅ Only after successful login
+    } catch (err) {
+      setError('An unexpected error occurred');
     }
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <h2>{type === "login" ? "Login" : "Sign Up"}</h2>
-
-        {/* Show error */}
-        {error && <div className="form-error">{error}</div>}
+    <div className="auth-modal-overlay">
+      <div className="auth-modal">
+        <button className="close-button" onClick={onClose}>×</button>
+        <h2>{type === 'login' ? 'Login' : 'Sign Up'}</h2>
+        
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Admission Number"
-            value={admission}
-            onChange={(e) => setAdmission(e.target.value)}
-          />
-          {type === "signup" && (
+          <div className="form-group">
+            <label>Admission Number</label>
             <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={admission}
+              onChange={(e) => setAdmission(e.target.value)}
+              required
             />
+          </div>
+
+          {type === 'signup' && (
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           )}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit" className="cta full">
-            {type === "login" ? "Login" : "Create Account"}
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" className="submit-button">
+            {type === 'login' ? 'Login' : 'Sign Up'}
           </button>
         </form>
 
-        <button className="close-btn" onClick={onClose}>
-          ×
-        </button>
+        <div className="auth-switch">
+          {type === 'login' ? (
+            <p>Don't have an account? <button onClick={() => onClose('signup')}>Sign up</button></p>
+          ) : (
+            <p>Already have an account? <button onClick={() => onClose('login')}>Login</button></p>
+          )}
+        </div>
       </div>
     </div>
   );

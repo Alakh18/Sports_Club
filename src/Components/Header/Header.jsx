@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../../context/usercontext.js";
-import AuthModal from "../AuthModal/AuthModal.jsx";
+import { useUser } from "../../context/usercontext";
+import AuthModal from "../AuthModal/AuthModal";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
@@ -37,7 +37,6 @@ function Header() {
     navigate("/");
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -64,7 +63,7 @@ function Header() {
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
             <a
-              href=""
+              href="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -78,7 +77,7 @@ function Header() {
               About
             </a>
             <a
-              href=""
+              href="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -97,7 +96,7 @@ function Header() {
             <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
             </a>
-            <Link to="/faq" className="header__nav-link">
+            <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
               FAQ
             </Link>
 
@@ -121,13 +120,9 @@ function Header() {
                 <div
                   className="profile-icon"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  title={user.firstName || "Profile"}
+                  title={user.admission || "Profile"}
                 >
-                  {user.profileImage ? (
-                    <img src={user.profileImage} alt="Profile" />
-                  ) : (
-                    <span>{(user.firstName || "U")[0]}</span>
-                  )}
+                  <span>{(user.admission || "U").charAt(0)}</span>
                 </div>
 
                 {dropdownOpen && (
@@ -137,7 +132,7 @@ function Header() {
                       className="dropdown-item"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      Update Profile
+                      Profile
                     </Link>
                     <button onClick={handleLogout} className="dropdown-item">
                       Logout
@@ -151,7 +146,10 @@ function Header() {
       </header>
 
       {authModal && (
-        <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
+        <AuthModal 
+          type={authModal} 
+          onClose={() => setAuthModal(null)} 
+        />
       )}
     </>
   );

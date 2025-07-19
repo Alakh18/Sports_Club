@@ -21,6 +21,7 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
   animation: popFade 0.4s ease;
   position: relative;
+  margin-left:35%;
 }
 
 @keyframes popFade {

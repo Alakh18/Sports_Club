@@ -2,8 +2,7 @@
   padding: 10px;
   padding-bottom: 100px;
   text-align: center;
-  background: linear-gradient(to bottom right, #fffaf0, #fef3c7); 
-
+  background: linear-gradient(to bottom right, #fffaf0, #fef3c7);
   color: #fff;
   min-height: 100vh;
 }
@@ -27,7 +26,7 @@
 
 .sport-card {
   position: relative;
-  height: 320px; 
+  height: 320px;
   border-radius: 18px;
   overflow: hidden;
   background-color: #1f2937;

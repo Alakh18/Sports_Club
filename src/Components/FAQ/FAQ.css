@@ -1,10 +1,8 @@
-/* src/components/FAQ.css */
-
 .faq-container {
   max-width: 1000px;
   margin: 60px auto;
   padding: 0 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: var(--background);
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
@@ -12,7 +10,7 @@
 
 .faq-title {
   text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: "Bebas Neue", sans-serif;
   font-size: 2.8rem;
   color: var(--primary);
   margin-bottom: 40px;
@@ -97,14 +95,14 @@
 }
 
 .faq-main-heading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 3.6rem;
   text-align: center;
   margin-top: 40px;
   letter-spacing: 2px;
   font-weight: 700;
 
-  background: linear-gradient(to right, #D72638, #FFD700); /* Red to Gold */
+  background: linear-gradient(to right, #d72638, #ffd700); /* Red to Gold */
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -112,9 +110,6 @@
 
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
 }
-
-
-
 
 /* Subtitle */
 .faq-subtitle {
@@ -137,7 +132,7 @@
 
 /* Title (left side of the header row) */
 .faq-title {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: "Bebas Neue", sans-serif;
   font-size: 2rem;
   color: var(--primary);
   margin: 0;
@@ -172,4 +167,3 @@
     align-self: flex-end;
   }
 }
-

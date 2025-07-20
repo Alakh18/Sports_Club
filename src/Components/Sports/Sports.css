@@ -1,91 +1,155 @@
-.sports-section {
-  background-color: #0e0e0e; /* Dark background */
-  color: #f9f9f9;
-  padding: 60px 20px;
-  text-align: center;
-}
-
-.sports-section h2 {
-  font-size: 2.5rem;
-  color: #ffd700; /* Golden heading */
-  margin-bottom: 40px;
-}
-
-.sports-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  padding: 0 20px;
-}
-
-.sport-card {
-  background-color: #1b1b1b;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 24px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.sport-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
-  border-color: #ffd700;
-}
-
-.sport-card h3 {
-  font-size: 1.5rem;
-  color: #ffd700;
-  margin-bottom: 12px;
-}
-
-.sport-card p {
-  margin: 6px 0;
-  color: #ccc;
-}
-
-.sport-card ul {
-  list-style: disc;
-  margin: 10px 0 0 20px;
-  color: #aaa;
-  text-align: left;
-}
-
-.sport-actions {
-  margin-top: 20px;
+.sport-detail-wrapper {
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  min-height: 100vh;
+  background-color: #fefae0;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  position: relative;
 }
 
-.sport-actions button {
-  padding: 10px 16px;
-  border-radius: 6px;
+/* Sidebar container */
+.sidebar-container {
+  position: relative;
+  display: flex;
+  transition: width 0.3s ease;
+}
+
+/* Sidebar */
+.sport-sidebar {
+  width: 240px;
+  background-color: #fffbe7;
+  padding: 30px 20px;
+  border-right: 1px solid #e5deb3;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Collapsed state */
+.sidebar-container.collapsed .sport-sidebar {
+  width: 0;
+  padding: 0;
   border: none;
-  background-color: #ffd700;
-  color: #000;
+  box-shadow: none;
+}
+
+.sidebar-container.collapsed .sport-sidebar *,
+.sidebar-container.collapsed .sport-sidebar-title,
+.sidebar-container.collapsed .sport-section-tabs {
+  display: none;
+}
+
+/* Toggle Button */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 20px;
+  left: 240px;
+  z-index: 10;
+  background-color: #f9e68c;
+  border: none;
+  padding: 8px 10px;
+  font-size: 1rem;
   font-weight: bold;
+  color: #3e3600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  border-radius: 5px;
+  transition: left 0.3s ease;
 }
 
-.sport-actions button:hover {
-  background-color: #ffce00;
+.sidebar-container.collapsed .sidebar-toggle-btn {
+  left: 10px;
 }
 
-/* Detail Page Styling */
-.sports-detail-page {
-  background-color: #111;
-  color: #f0f0f0;
-  padding: 50px 30px;
-  max-width: 800px;
-  margin: 0 auto;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(255, 215, 0, 0.15);
+/* Sidebar Title */
+.sport-sidebar-title {
+  margin-bottom: 30px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #5c5100;
 }
 
-.sports-detail-page h2 {
-  font-size: 2.2rem;
-  color: #ffd700;
-  margin-bottom: 20px;
+/* Section Tabs */
+.sport-section-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sport-section-tabs li {
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #4d4200;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.sport-section-tabs li:hover {
+  background-color: #f1eac7;
+  color: #2c2500;
+}
+
+.sport-section-tabs li.active {
+  background-color: #f9e68c;
+  font-weight: 600;
+  color: #2b2300;
+}
+
+/* Main content */
+.sport-section-content {
+  flex-grow: 1;
+  padding: 50px 40px;
+  background-color: #fefae0;
+  transition: margin-left 0.3s ease;
+}
+
+.sport-section-content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #3e3600;
+}
+
+.sport-section-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #4b4400;
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .sport-detail-wrapper {
+    flex-direction: column;
+  }
+
+  .sport-sidebar {
+    width: 100%;
+    display: flex;
+    padding: 20px;
+    border-right: none;
+    border-bottom: 1px solid #e5deb3;
+    overflow-x: auto;
+  }
+
+  .sport-section-tabs {
+    display: flex;
+    gap: 12px;
+    flex-grow: 1;
+    justify-content: space-around;
+  }
+
+  .sport-section-tabs li {
+    margin-bottom: 0;
+    white-space: nowrap;
+    padding: 10px 12px;
+  }
+
+  .sport-section-content {
+    padding: 30px 20px;
+  }
+
+  .sidebar-toggle-btn {
+    display: none;
+  }
 }

@@ -16,10 +16,10 @@ function UserProvider({ children }) {
           return;
         }
 
-        const res = await axios.get("/api/auth/me", {
+        const res = await axios.get("/api/users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setUser(res.data.user);
+        setUser(res.data);
       } catch (err) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("loggedInUser");
@@ -41,7 +41,7 @@ function UserProvider({ children }) {
       );
 
       const { user, token } = res.data;
-      
+
       setUser(user);
       localStorage.setItem("loggedInUser", JSON.stringify(user));
       localStorage.setItem("authToken", token);
@@ -89,11 +89,24 @@ function UserProvider({ children }) {
     }
   };
 
- return React.createElement(
-  UserContext.Provider,
-  { value: { user, login, signup, logout, loading } },
-  children
-);
+  const getCurrentUser = async () => {
+  try {
+    const token = localStorage.getItem("authToken");
+    const res = await axios.get("/api/users/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setUser(res.data);
+  } catch (err) {
+    console.error("Failed to fetch current user:", err);
+  }
+};
+
+
+  return React.createElement(
+    UserContext.Provider,
+    { value: { user, login, signup, logout,getCurrentUser, loading, setUser } },
+    children
+  );
 }
 
 function useUser() {

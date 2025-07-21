@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/usercontext";
 import AuthModal from "../AuthModal/AuthModal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
@@ -14,6 +14,21 @@ function Header() {
   const location = useLocation();
 
   const closeMenu = () => setMenuOpen(false);
+
+  const goTo = (section) => {
+    if (location.pathname === "/") {
+      const element = document.getElementById(section);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/", { state: { scrollTo: section } });
+    }
+  };
+
+  const handleAboutClick = (tab = "about") => {
+    navigate("/about", { state: { activeTab: tab } });
+  };
 
   const handleLogout = () => {
     logout();
@@ -47,43 +62,53 @@ function Header() {
           </button>
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
-            <a
-              href="/"
+            <Link
+              to="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo(navigate, location, "hero");
+                goTo("hero");
                 closeMenu();
               }}
             >
               Home
-            </a>
+            </Link>
             <Link
               to="/about"
-              onClick={() => handleAboutClick(navigate, location)}
               className="header__nav-link"
+              onClick={() => {
+                handleAboutClick("about");
+                closeMenu();
+              }}
             >
               About
             </Link>
-            <a
-              href="/"
+            <Link
+              to="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo(navigate, location, "sports");
+                goTo("sports");
                 closeMenu();
               }}
             >
               Sports
-            </a>
+            </Link>
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => handleAboutClick(navigate, location, "contact")}
+              onClick={() => {
+                handleAboutClick("contact");
+                closeMenu();
+              }}
             >
               Contact
             </Link>
-            <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
+            <Link 
+              to="/faq" 
+              className="header__nav-link" 
+              onClick={closeMenu}
+            >
               FAQ
             </Link>
 
@@ -121,7 +146,10 @@ function Header() {
                     >
                       Profile
                     </Link>
-                    <button onClick={handleLogout} className="dropdown-item">
+                    <button 
+                      onClick={handleLogout} 
+                      className="dropdown-item"
+                    >
                       Logout
                     </button>
                   </div>

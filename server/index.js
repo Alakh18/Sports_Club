@@ -164,18 +164,33 @@ app.get("/api/users/me", authenticate, async (req, res) => {
 // UPDATE profile
 app.put("/api/users/profile", authenticate, async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
-    if (!user) return res.status(404).json({ error: "User not found" });
+    const userId = req.userId;
+    const updates = { ...req.body };
 
-    await user.updateProfile(req.body);
+    // If password is provided, hash it
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    } else {
+      delete updates.password; // Avoid overwriting existing hashed password with blank
+    }
 
-    const updatedUser = await User.findById(req.userId).select("-password");
-    res.json(updatedUser);
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
   } catch (err) {
     console.error("Profile update error:", err);
     res.status(500).json({ error: "Failed to update profile" });
   }
 });
+
 
 
 

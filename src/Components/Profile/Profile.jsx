@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import { useNavigate } from "react-router-dom";
-import "./Profile.css" 
+import "./Profile.css";
 
 function Profile() {
-  const { user, login, logout } = useUser();
+  const { user, login, logout, getCurrentUser } = useUser();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,6 +19,8 @@ function Profile() {
   });
 
   const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [adminRequestSent, setAdminRequestSent] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -39,48 +41,48 @@ function Profile() {
     }
   };
 
-const { getCurrentUser } = useUser();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
 
-  if (formData.password && formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
+    try {
+      const token = localStorage.getItem("authToken");
+      await fetch("/api/users/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
-  try {
-    const token = localStorage.getItem("authToken");
-    await fetch("/api/users/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(formData)
-    });
+      await getCurrentUser(); // Refresh user data
+      setToastMessage("✅ Profile saved successfully!");
+      setToastVisible(true);
+      setTimeout(() => {
+        setToastVisible(false);
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.error("Error: Failed to update profile", err);
+      alert("Something went wrong while saving profile.");
+    }
+  };
 
-    await getCurrentUser(); // Refresh user data
+  // NEW: Handle Admin Request
+  const handleAdminRequest = () => {
+    setAdminRequestSent(true);
+    setToastMessage(
+      "🛡️ Admin request sent successfully. Please wait for approval."
+    );
     setToastVisible(true);
     setTimeout(() => {
       setToastVisible(false);
-      navigate("/");
-    }, 2000);
-  } catch (err) {
-    console.error("Error: Failed to update profile", err);
-    alert("Something went wrong while saving profile.");
-  }
-};
-
-
-  const handleDelete = () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your profile?"
-    );
-    if (confirmDelete) {
-      logout();
-      navigate("/");
-    }
+    }, 3000);
   };
 
   return (
@@ -184,18 +186,18 @@ const handleSubmit = async (e) => {
           <button type="submit" className="cta full save-btn">
             Save Profile
           </button>
+
           <button
             type="button"
-            className="cta full delete-btn"
-            onClick={handleDelete}
+            className="cta full save-btn"
+            onClick={handleAdminRequest}
+            disabled={adminRequestSent}
           >
-            Delete Profile
+            Request Admin Access
           </button>
         </form>
 
-        {toastVisible && (
-          <div className="profile-toast">✅ Profile saved successfully!</div>
-        )}
+        {toastVisible && <div className="profile-toast">{toastMessage}</div>}
       </div>
     </>
   );

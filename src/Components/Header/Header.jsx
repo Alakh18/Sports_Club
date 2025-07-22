@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../../context/usercontext";
-import AuthModal from "../AuthModal/AuthModal";
+import { useUser } from "../../context/usercontext.js";
+import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { handleAboutClick, goTo } from "../../utils/ui.js";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
@@ -31,21 +32,6 @@ function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const goTo = (section) => {
-    if (location.pathname === "/") {
-      const element = document.getElementById(section);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      navigate("/", { state: { scrollTo: section } });
-    }
-  };
-
-  const handleAboutClick = (tab = "about") => {
-    navigate("/about", { state: { activeTab: tab } });
-  };
-
   const handleLogout = () => {
     logout();
     setDropdownOpen(false);
@@ -53,6 +39,7 @@ function Header() {
     navigate("/");
   };
 
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -78,30 +65,30 @@ function Header() {
           </button>
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
-            <Link
-              to="/"
+            <a
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
+                goTo(navigate, location, "hero");
                 goTo("hero");
                 goToHero();
                 closeMenu();
               }}
             >
               Home
-            </Link>
+            </a>
             <Link
               to="/about"
+              onClick={() => handleAboutClick(navigate, location)}
               className="header__nav-link"
-              onClick={() => {
-                handleAboutClick("about");
-                closeMenu();
-              }}
             >
             </a>
             <a href="#about" className="header__nav-link" onClick={closeMenu}>
               About
             </Link>
+            <a
+              href=""
             <Link
               to="/"
             </a>
@@ -110,20 +97,18 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
+                goTo(navigate, location, "sports");
                 goTo("sports");
                 goToSports();
                 closeMenu();
               }}
             >
               Sports
-            </Link>
+            </a>
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => {
-                handleAboutClick("contact");
-                closeMenu();
-              }}
+              onClick={() => handleAboutClick(navigate, location, "contact")}
             >
             </a>
             <a href="#events" className="header__nav-link" onClick={closeMenu}>
@@ -135,6 +120,7 @@ function Header() {
             <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
             </Link>
+            <Link to="/faq" className="header__nav-link">
             <Link 
               to="/faq" 
               className="header__nav-link" 
@@ -167,7 +153,11 @@ function Header() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   title={user.admission || "Profile"}
                 >
-                  <span>{(user.admission || "U").charAt(0)}</span>
+                  {user.profileImage ? (
+                    <img src={user.profileImage} alt="Profile" />
+                  ) : (
+                    <span>{(user.admission || "U").charAt(0)}</span>
+                  )}
                 </div>
 
                 {dropdownOpen && (
@@ -177,12 +167,9 @@ function Header() {
                       className="dropdown-item"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      Profile
+                      Update Profile
                     </Link>
-                    <button 
-                      onClick={handleLogout} 
-                      className="dropdown-item"
-                    >
+                    <button onClick={handleLogout} className="dropdown-item">
                       Logout
                     </button>
                   </div>
@@ -194,9 +181,15 @@ function Header() {
       </header>
 
       {authModal && (
-        <AuthModal 
-          type={authModal} 
-          onClose={() => setAuthModal(null)} 
+        <AuthModal
+          type={authModal}
+          onClose={(newType) => {
+            if (newType === "login" || newType === "signup") {
+              setAuthModal(newType);
+            } else {
+              setAuthModal(null);
+            }
+          }}
         />
       )}
     </>

@@ -1,4 +1,6 @@
-.modal-backdrop {
+/* Backdrop overlay */
+.modal-backdrop,
+.auth-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,9 +13,10 @@
   z-index: 1000;
 }
 
+/* Modal box */
 .auth-modal {
-  background: #fff;
-  color: var(--text-dark);
+  background: #ffffff;
+  color: #1b1b1b;
   padding: 30px;
   border-radius: 12px;
   max-width: 400px;
@@ -21,9 +24,9 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
   animation: popFade 0.4s ease;
   position: relative;
-  margin-left:35%;
 }
 
+/* Opening animation */
 @keyframes popFade {
   from {
     opacity: 0;
@@ -35,12 +38,28 @@
   }
 }
 
+/* Modal title */
 .auth-modal h2 {
   text-align: center;
-  color: var(--primary);
-  margin-bottom: 20px;
+  color: #c29200;
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
+/* Error message */
+.form-error {
+  color: #e63946;
+  margin: 0 0 18px;
+  padding: 8px 10px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: center;
+  background-color: rgba(230, 57, 70, 0.08);
+  border-radius: 6px;
+}
+
+/* Input fields */
 .auth-modal input {
   width: 100%;
   padding: 12px;
@@ -48,23 +67,44 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  color: #1b1b1b;
+  background-color: #f9f9f9;
 }
 
+/* Focused input */
 .auth-modal input:focus {
-  border-color: var(--accent);
+  border-color: #c29200;
   outline: none;
 }
 
-.cta.small {
-  font-size: 0.9rem;
-  padding: 6px 14px;
-  margin-left: 10px;
+/* Labels */
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  font-size: 0.95rem;
 }
 
-.cta.full {
+/* Submit button */
+.submit-button {
   width: 100%;
+  padding: 12px;
+  background-color: #c29200;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
+.submit-button:hover {
+  background-color: #a77a00;
+}
+
+/* Close button (X) */
+.close-button,
 .close-btn {
   position: absolute;
   top: 10px;
@@ -72,18 +112,30 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: var(--secondary);
+  color: #e63946;
   cursor: pointer;
 }
 
+.close-button:hover,
 .close-btn:hover {
-  color: var(--primary);
+  color: #c29200;
 }
 
-.form-error {
-  color: var(--secondary);
-  margin-bottom: 10px;
-  font-weight: 500;
-  font-size: 0.95rem;
+/* Auth switch (login/signup toggle) */
+.auth-switch {
+  margin-top: 18px;
   text-align: center;
+  font-size: 0.95rem;
+}
+
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #c29200;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-switch button:hover {
+  text-decoration: underline;
 }

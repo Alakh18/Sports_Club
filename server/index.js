@@ -43,11 +43,11 @@ app.post("/api/auth/signup", async (req, res) => {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({ 
       admission, 
       email, 
-      password: hashedPassword 
+      password
     });
 
     await newUser.save();
@@ -85,6 +85,8 @@ app.post("/api/auth/login", async (req, res) => {
       console.log("❌ User not found in database");
       return res.status(404).json({ error: "User not found" });
     }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ error: "Authentication failed" });
 
     console.log("ℹ️ User found:", {
       admission: user.admission,
@@ -133,6 +135,46 @@ app.get("/api/auth/me", async (req, res) => {
 
 app.post("/api/auth/logout", (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
+});
+
+// Middleware to protect routes
+function authenticate(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    req.userId = decoded.id;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+}
+
+// GET current user
+app.get("/api/users/me", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch user data" });
+  }
+});
+
+// UPDATE profile
+app.put("/api/users/profile", authenticate, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    await user.updateProfile(req.body);
+
+    const updatedUser = await User.findById(req.userId).select("-password");
+    res.json(updatedUser);
+  } catch (err) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ error: "Failed to update profile" });
+  }
 });
 
 

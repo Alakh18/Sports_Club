@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../../context/usercontext";
-import AuthModal from "../AuthModal/AuthModal";
+import { useUser } from "../../context/usercontext.js";
+import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { handleAboutClick, goTo } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -15,21 +16,6 @@ function Header() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const goTo = (section) => {
-    if (location.pathname === "/") {
-      const element = document.getElementById(section);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      navigate("/", { state: { scrollTo: section } });
-    }
-  };
-
-  const handleAboutClick = (tab = "about") => {
-    navigate("/about", { state: { activeTab: tab } });
-  };
-
   const handleLogout = () => {
     logout();
     setDropdownOpen(false);
@@ -37,6 +23,7 @@ function Header() {
     navigate("/");
   };
 
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -62,53 +49,43 @@ function Header() {
           </button>
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
-            <Link
-              to="/"
+            <a
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo("hero");
+                goTo(navigate, location, "hero");
                 closeMenu();
               }}
             >
               Home
-            </Link>
+            </a>
             <Link
               to="/about"
+              onClick={() => handleAboutClick(navigate, location)}
               className="header__nav-link"
-              onClick={() => {
-                handleAboutClick("about");
-                closeMenu();
-              }}
             >
               About
             </Link>
-            <Link
-              to="/"
+            <a
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo("sports");
+                goTo(navigate, location, "sports");
                 closeMenu();
               }}
             >
               Sports
-            </Link>
+            </a>
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => {
-                handleAboutClick("contact");
-                closeMenu();
-              }}
+              onClick={() => handleAboutClick(navigate, location, "contact")}
             >
               Contact
             </Link>
-            <Link 
-              to="/faq" 
-              className="header__nav-link" 
-              onClick={closeMenu}
-            >
+            <Link to="/faq" className="header__nav-link">
               FAQ
             </Link>
 
@@ -134,7 +111,11 @@ function Header() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   title={user.admission || "Profile"}
                 >
-                  <span>{(user.admission || "U").charAt(0)}</span>
+                  {user.profileImage ? (
+                    <img src={user.profileImage} alt="Profile" />
+                  ) : (
+                    <span>{(user.admission || "U").charAt(0)}</span>
+                  )}
                 </div>
 
                 {dropdownOpen && (
@@ -144,12 +125,9 @@ function Header() {
                       className="dropdown-item"
                       onClick={() => setDropdownOpen(false)}
                     >
-                      Profile
+                      Update Profile
                     </Link>
-                    <button 
-                      onClick={handleLogout} 
-                      className="dropdown-item"
-                    >
+                    <button onClick={handleLogout} className="dropdown-item">
                       Logout
                     </button>
                   </div>
@@ -161,9 +139,15 @@ function Header() {
       </header>
 
       {authModal && (
-        <AuthModal 
-          type={authModal} 
-          onClose={() => setAuthModal(null)} 
+        <AuthModal
+          type={authModal}
+          onClose={(newType) => {
+            if (newType === "login" || newType === "signup") {
+              setAuthModal(newType);
+            } else {
+              setAuthModal(null);
+            }
+          }}
         />
       )}
     </>

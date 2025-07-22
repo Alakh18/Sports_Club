@@ -17,7 +17,7 @@ function UserProvider({ children }) {
         }
 
         const res = await axios.get("/api/users/me", {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
       } catch (err) {
@@ -90,21 +90,22 @@ function UserProvider({ children }) {
   };
 
   const getCurrentUser = async () => {
-  try {
-    const token = localStorage.getItem("authToken");
-    const res = await axios.get("/api/users/me", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setUser(res.data);
-  } catch (err) {
-    console.error("Failed to fetch current user:", err);
-  }
-};
-
+    try {
+      const token = localStorage.getItem("authToken");
+      const res = await axios.get("/api/users/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(res.data);
+    } catch (err) {
+      console.error("Failed to fetch current user:", err);
+    }
+  };
 
   return React.createElement(
     UserContext.Provider,
-    { value: { user, login, signup, logout,getCurrentUser, loading, setUser } },
+    {
+      value: { user, login, signup, logout, getCurrentUser, loading, setUser },
+    },
     children
   );
 }

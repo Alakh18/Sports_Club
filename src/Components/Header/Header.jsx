@@ -11,7 +11,22 @@ function Header() {
   const dropdownRef = useRef(null);
   const { user, logout } = useUser();
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const goToHero = () => {
+    navigate("/");
+    setTimeout(() => {
+      const hero = document.getElementById("hero");
+      hero?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
+  const goToSports = () => {
+    navigate("/");
+    setTimeout(() => {
+      const sportsSection = document.getElementById("sports");
+      sportsSection?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -52,37 +67,35 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo(navigate, location, "hero");
+                goToHero();
                 closeMenu();
               }}
             >
               Home
             </a>
-            <Link
-              to="/about"
-              onClick={() => handleAboutClick(navigate, location)}
-              className="header__nav-link"
-            >
+            <a href="#about" className="header__nav-link" onClick={closeMenu}>
               About
-            </Link>
+            </a>
             <a
               href="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo(navigate, location, "sports");
+                goToSports();
                 closeMenu();
               }}
             >
               Sports
             </a>
-            <Link
-              to="/about"
-              className="header__nav-link"
-              onClick={() => handleAboutClick(navigate, location, "contact")}
-            >
+            <a href="#events" className="header__nav-link" onClick={closeMenu}>
+              Events
+            </a>
+            <a href="#gallery" className="header__nav-link" onClick={closeMenu}>
+              Gallery
+            </a>
+            <a href="#contact" className="header__nav-link" onClick={closeMenu}>
               Contact
-            </Link>
+            </a>
             <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
               FAQ
             </Link>

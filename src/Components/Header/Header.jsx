@@ -129,12 +129,20 @@ function Header() {
             ) : (
               <div className="profile-dropdown" ref={dropdownRef}>
                 <div
-                  className="profile-icon"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  title={user.admission || "Profile"}
-                >
-                  <span>{(user.admission || "U").charAt(0)}</span>
-                </div>
+                    className="profile-icon"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    title={user.admission || "Profile"}
+                  >
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        alt="Profile"
+                        className="profile-image-icon"
+                      />
+                    ) : (
+                      <span>{(user.admission || "U").charAt(0)}</span>
+                    )}
+                  </div>
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">

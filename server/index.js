@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
@@ -16,12 +16,15 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+
 
 // MongoDB connection
-mongoose.connect("mongodb://localhost:27017/sports-club")
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+mongoose.connect(process.env.MONGODB_URI, {
+  
+})
+.then(() => console.log("✅ Connected to MongoDB Atlas"))
+.catch(err => console.error("❌ MongoDB Atlas connection error:", err));
 
 // JWT Secret
 const SECRET_KEY = process.env.SECRET_KEY || "your_fallback_secret_key";

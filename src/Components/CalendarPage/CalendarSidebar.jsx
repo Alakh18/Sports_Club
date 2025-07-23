@@ -45,4 +45,8 @@ export default function CalendarSidebar({ selectedDate, setSelectedDate, trigger
       )}
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b

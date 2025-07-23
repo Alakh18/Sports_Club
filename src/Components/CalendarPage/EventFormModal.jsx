@@ -46,4 +46,8 @@ export default function EventFormModal({ selectedDate, onClose, triggerRefresh }
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b

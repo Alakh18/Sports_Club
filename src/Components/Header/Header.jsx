@@ -23,7 +23,6 @@ function Header() {
     navigate("/");
   };
 
-  // Close dropdown if clicked outside
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -50,7 +49,7 @@ function Header() {
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
             <a
-              href=""
+              href="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -60,13 +59,18 @@ function Header() {
             >
               Home
             </a>
+
             <Link
               to="/about"
-              onClick={() => handleAboutClick(navigate, location)}
               className="header__nav-link"
+              onClick={() => {
+                handleAboutClick(navigate, location);
+                closeMenu();
+              }}
             >
               About
             </Link>
+
             <a
               href=""
               className="header__nav-link"
@@ -78,16 +82,35 @@ function Header() {
             >
               Sports
             </a>
+
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => handleAboutClick(navigate, location, "contact")}
+              onClick={() => {
+                handleAboutClick(navigate, location, "contact");
+                closeMenu();
+              }}
             >
               Contact
             </Link>
+<<<<<<< HEAD
             <Link to="/faq" className="header__nav-link">
+=======
+
+            <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
+>>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b
               FAQ
             </Link>
+
+            {user?.role === "admin" && (
+              <Link
+                to="/requests"
+                className="header__nav-link"
+                onClick={closeMenu}
+              >
+                Requests
+              </Link>
+            )}
 
             {!user ? (
               <>
@@ -112,7 +135,11 @@ function Header() {
                   title={user.admission || "Profile"}
                 >
                   {user.profileImage ? (
-                    <img src={user.profileImage} alt="Profile" />
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      className="profile-image-icon"
+                    />
                   ) : (
                     <span>{(user.admission || "U").charAt(0)}</span>
                   )}
@@ -120,13 +147,15 @@ function Header() {
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link
-                      to="/profile"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Update Profile
-                    </Link>
+                    {user.role !== "admin" && (
+                      <Link
+                        to="/profile"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                    )}
                     <button onClick={handleLogout} className="dropdown-item">
                       Logout
                     </button>

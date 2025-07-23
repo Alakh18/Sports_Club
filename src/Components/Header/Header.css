@@ -97,10 +97,6 @@
   transition: background 0.2s;
 }
 
-.dropdown-item:hover {
-  background-color: #f2f2f2;
-}
-
 .profile-icon {
   width: 42px;
   height: 42px;
@@ -152,4 +148,5 @@
 .dropdown-menu a:hover,
 .dropdown-menu button:hover {
   background-color: rgba(13, 27, 42, 0.05);
+  color: var(--primary);
 }

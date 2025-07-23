@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../../context/usercontext";
-import AuthModal from "../AuthModal/AuthModal";
-import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../../context/usercontext.js";
+import AuthModal from "../AuthModal/AuthModal.jsx";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { handleAboutClick, goTo } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -11,22 +12,7 @@ function Header() {
   const dropdownRef = useRef(null);
   const { user, logout } = useUser();
   const navigate = useNavigate();
-
-  const goToHero = () => {
-    navigate("/");
-    setTimeout(() => {
-      const hero = document.getElementById("hero");
-      hero?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
-
-  const goToSports = () => {
-    navigate("/");
-    setTimeout(() => {
-      const sportsSection = document.getElementById("sports");
-      sportsSection?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  };
+  const location = useLocation();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -67,40 +53,51 @@ function Header() {
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goToHero();
+                goTo(navigate, location, "hero");
                 closeMenu();
               }}
             >
               Home
             </a>
-            <a href="#about" className="header__nav-link" onClick={closeMenu}>
+
+            <Link
+              to="/about"
+              className="header__nav-link"
+              onClick={() => {
+                handleAboutClick(navigate, location);
+                closeMenu();
+              }}
+            >
               About
-            </a>
+            </Link>
+
             <a
-              href="/"
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goToSports();
+                goTo(navigate, location, "sports");
                 closeMenu();
               }}
             >
               Sports
             </a>
-            <a href="#events" className="header__nav-link" onClick={closeMenu}>
-              Events
-            </a>
-            <a href="#gallery" className="header__nav-link" onClick={closeMenu}>
-              Gallery
-            </a>
-            <a href="#contact" className="header__nav-link" onClick={closeMenu}>
+
+            <Link
+              to="/about"
+              className="header__nav-link"
+              onClick={() => {
+                handleAboutClick(navigate, location, "contact");
+                closeMenu();
+              }}
+            >
               Contact
-            </a>
+            </Link>
+
             <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
               FAQ
             </Link>
 
-            {/* ✅ Show Requests link only to admins */}
             {user?.role === "admin" && (
               <Link
                 to="/requests"
@@ -129,24 +126,23 @@ function Header() {
             ) : (
               <div className="profile-dropdown" ref={dropdownRef}>
                 <div
-                    className="profile-icon"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    title={user.admission || "Profile"}
-                  >
-                    {user.profileImage ? (
-                      <img
-                        src={user.profileImage}
-                        alt="Profile"
-                        className="profile-image-icon"
-                      />
-                    ) : (
-                      <span>{(user.admission || "U").charAt(0)}</span>
-                    )}
-                  </div>
+                  className="profile-icon"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  title={user.admission || "Profile"}
+                >
+                  {user.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      className="profile-image-icon"
+                    />
+                  ) : (
+                    <span>{(user.admission || "U").charAt(0)}</span>
+                  )}
+                </div>
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">
-                    {/* ❌ Hide profile option for admins */}
                     {user.role !== "admin" && (
                       <Link
                         to="/profile"
@@ -168,7 +164,16 @@ function Header() {
       </header>
 
       {authModal && (
-        <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
+        <AuthModal
+          type={authModal}
+          onClose={(newType) => {
+            if (newType === "login" || newType === "signup") {
+              setAuthModal(newType);
+            } else {
+              setAuthModal(null);
+            }
+          }}
+        />
       )}
     </>
   );

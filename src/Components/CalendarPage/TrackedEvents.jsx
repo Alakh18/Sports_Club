@@ -14,19 +14,20 @@ export default function TrackedEvents({ triggerRefresh }) {
   }, [triggerRefresh]);
 
   return (
-    <div className="w-64 bg-white shadow-lg p-4 border-l">
-      <h2 className="text-xl font-bold mb-4">📌 Tracked Events</h2>
-      {tracked.length === 0 ? (
-        <p className="text-gray-500">No tracked events.</p>
-      ) : (
-        <ul className="space-y-3">
-          {tracked.map((event) => (
-            <li key={event._id} className="bg-gray-100 p-2 rounded text-sm">
-              {new Date(event.date).toDateString()} - <b>{event.title}</b>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
+  <div className="tracked-container">
+  <h2 className="tracked-title">📌 Tracked Events</h2>
+
+  {tracked.length === 0 ? (
+    <p>No tracked events.</p>
+  ) : (
+    <ul className="tracked-list">
+      {tracked.map((event) => (
+        <li key={event._id} className="tracked-card">
+          {new Date(event.date).toDateString()} - <b>{event.title}</b>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+);
 }

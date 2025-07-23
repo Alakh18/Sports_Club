@@ -33,26 +33,26 @@ export default function CalendarEventList({ selectedDate, refreshFlag, triggerRe
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Events on {selectedDate.toDateString()}</h2>
-      {events.length === 0 && <p>No events today.</p>}
-      <ul className="space-y-4">
-        {events.map((event) => (
-          <li key={event._id} className="bg-white p-4 shadow rounded flex justify-between items-center">
-            <span>{event.title}</span>
-            <button
-              onClick={() => toggleTrack(event._id)}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-            >
-              {user?.trackedEvents?.includes(event._id) ? "Untrack" : "Track"}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <div className="event-list-container">
+  <h2 className="event-title">
+    🗓️ Events on {selectedDate.toDateString()}
+  </h2>
+
+  {events.length === 0 && <p>No events today.</p>}
+
+  <ul className="event-list">
+    {events.map((event) => (
+      <li key={event._id} className="event-card">
+        <span>{event.title}</span>
+        <button
+          onClick={() => toggleTrack(event._id)}
+          className="track-btn"
+        >
+          {user?.trackedEvents?.includes(event._id) ? "Untrack" : "Track"}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b

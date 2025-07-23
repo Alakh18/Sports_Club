@@ -93,13 +93,16 @@ function Header() {
             >
               Contact
             </Link>
-<<<<<<< HEAD
-            <Link to="/faq" className="header__nav-link">
-=======
 
             <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
->>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b
               FAQ
+            </Link>
+
+            <Link
+            to="/calendar"
+            className="header__nav-link"
+            onClick={closeMenu}
+>           Calendar
             </Link>
 
             {user?.role === "admin" && (

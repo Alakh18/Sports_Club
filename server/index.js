@@ -270,17 +270,10 @@ app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, 
 
 // Start the server
 app.listen(port, () => {
-<<<<<<< HEAD
-  console.log(`🚀 Server running on http://localhost:${port}`);
-});
-app.get("/api/message", (req, res) => {
-  res.json({ message: "Hello from the backend!" });
-=======
     console.log(`🚀 Server running on http://localhost:${port}`);
 });
 
 // Simple test route
 app.get("/api/message", (req, res) => {
     res.json({ message: "Hello from the backend!" });
->>>>>>> ffc694b7300a5c87301e29dd888276e5929acb1b
 });

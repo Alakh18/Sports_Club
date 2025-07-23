@@ -1,0 +1,151 @@
+:root {
+  --primary: #0d1b2a;
+  --accent: #ffd700;
+  --secondary: #d72638;
+  --background: #fffef6;
+  --text-dark: #2c2c2c;
+  --text-light: #ffffff;
+}
+
+/* Calendar Layout */
+.calendar-sidebar-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #fffef6;
+  padding: 40px 20px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Calendar box */
+.calendar-box {
+  width: 300px;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Selected date panel */
+.selected-date-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.selected-label {
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.selected-date {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-light);
+  background-color: var(--primary);
+  padding: 12px 20px;
+  border-radius: 8px;
+}
+
+/* Add Event Button */
+.add-event-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-event-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Shared section containers */
+.event-list-container,
+.tracked-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #fffef6;
+  border-radius: 12px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.05);
+  font-family: "Poppins", sans-serif;
+}
+
+/* Section headings */
+.event-title,
+.tracked-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+/* Event/Tracked Lists */
+.event-list,
+.tracked-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-card,
+.tracked-card {
+  background-color: #f8f8f8;
+  border: 1px solid #e2e2e2;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.event-card:hover,
+.tracked-card:hover {
+  background-color: #f0f0f0;
+}
+
+/* Track/Untrack Button */
+.track-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.track-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Calendar Base Styling */
+.custom-calendar {
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  background-color: #fdfdfd;
+  border: none;
+}
+
+/* Highlight today */
+.highlight-today {
+  background: linear-gradient(to right, var(--accent), var(--secondary));
+  color: var(--text-light) !important;
+  font-weight: bold;
+  border-radius: 50%;
+}

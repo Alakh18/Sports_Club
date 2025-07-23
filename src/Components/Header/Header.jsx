@@ -98,6 +98,13 @@ function Header() {
               FAQ
             </Link>
 
+            <Link
+            to="/calendar"
+            className="header__nav-link"
+            onClick={closeMenu}
+>           Calendar
+            </Link>
+
             {user?.role === "admin" && (
               <Link
                 to="/requests"

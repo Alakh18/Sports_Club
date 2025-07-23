@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js"); // ⬅️ Import admin request model
+const Event = require("./models/Event.js");
 
 const app = express();
 const port = process.env.PORT || 5000;

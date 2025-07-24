@@ -7,10 +7,11 @@ const jwt = require('jsonwebtoken');
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js"); // ⬅️ Import admin request model
 const Event = require("./models/Event.js");
-
+const sportRoutes = require('./routes/sportRoutes');
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use('/api/sports', sportRoutes);
 // Middleware
     app.use(cors({
     origin: ["http://localhost:5173", "http://localhost:5174"], 
@@ -163,23 +164,29 @@ app.get("/api/users/me", authenticate, async (req, res) => {
 });
 
 // Update user profile
+// Update user profile
 app.put("/api/users/profile", authenticate, async (req, res) => {
     try {
         const user = await User.findById(req.userId);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        const { email, password } = req.body;
+        const { email, password, ...otherProfileData } = req.body;
 
+        // Update profile fields (firstName, lastName, etc.)
+        await user.updateProfile(otherProfileData); // uses your custom method
+
+        // Update email if provided
         if (email) {
             user.email = email;
         }
 
+        // Update password if provided
         if (password) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user.password = hashedPassword;
-        }
+    user.password = password; // let pre-save hook handle hashing
+}
 
-        await user.save();
+
+        await user.save(); // triggers pre-save middleware (but we hash manually, so it's safe)
 
         const updatedUser = await User.findById(req.userId).select("-password");
         res.json(updatedUser);
@@ -188,6 +195,7 @@ app.put("/api/users/profile", authenticate, async (req, res) => {
         res.status(500).json({ error: "Failed to update profile" });
     }
 });
+
 
 
 // =======================================

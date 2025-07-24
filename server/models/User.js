@@ -17,28 +17,34 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now } // This is also automatically handled by `timestamps: true`
 }, { timestamps: true }); // Add timestamps option for createdAt and updatedAt
 
-// Keep your existing password hashing middleware - CORRECTED
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) {
-        return next();
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next(); // only hash if password is modified
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        return next(err);
     }
-    // Generate a salt and then hash the password
-    const salt = await bcrypt.genSalt(10); // Await the salt generation
-    this.password = await bcrypt.hash(this.password, salt); // Await the hashing
-    next();
 });
+
 
 // Add method to update profile without affecting auth fields
 userSchema.methods.updateProfile = async function(profileData) {
-    // Also include 'department' and 'year' here if they are intended to be updatable,
-    // as they were present in your previous server code's update logic suggestion.
-    const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year'];
-    allowedUpdates.forEach(field => {
+    const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year', 'password'];
+    for (const field of allowedUpdates) {
         if (profileData[field] !== undefined) {
-            this[field] = profileData[field];
+            if (field === 'password') {
+                const salt = await bcrypt.genSalt(10);
+                this.password = await bcrypt.hash(profileData.password, salt);
+            } else {
+                this[field] = profileData[field];
+            }
         }
-    });
+    }
     return this.save();
 };
+
 
 module.exports = mongoose.model("User", userSchema);

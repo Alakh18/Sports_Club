@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
@@ -18,12 +18,13 @@ const port = process.env.PORT || 5000;
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use(express.json()); // To parse JSON request bodies
+// JSON body parser with 10MB limit
+app.use(express.json({ limit: '10mb' }));
 
-// MongoDB connection
+// MongoDB connection with local fallback
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/sports-club")
-    .then(() => console.log("✅ Connected to MongoDB"))
-    .catch(err => console.error("❌ MongoDB connection error:", err));
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ MongoDB connection error:", err));
 
 // JWT Secret
 const SECRET_KEY = process.env.SECRET_KEY || "your_fallback_secret_key_please_change_this_in_production"; // Use a strong, random key in .env

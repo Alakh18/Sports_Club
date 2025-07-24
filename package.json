@@ -16,6 +16,7 @@
     "mongodb": "^6.18.0",
     "mongoose": "^8.16.4",
     "react": "^19.0.0",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.3"
   },

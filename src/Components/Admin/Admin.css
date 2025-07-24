@@ -1,0 +1,380 @@
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--primary); /* Dark base */
+  color: #2c2c2c;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 240px;
+  background-color: #fffbe7;
+  padding: 30px 20px;
+  border-right: 1px solid #f3e7c5;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.admin-sidebar h2 {
+  margin-bottom: 24px;
+  font-size: 1.4rem;
+  color: #5a4e00;
+}
+
+.admin-tabs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-tabs li {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.3s ease;
+  color: #3f3700;
+}
+
+.admin-tabs li:hover {
+  background-color: #f1eac7;
+}
+
+.admin-tabs li.active {
+  background-color: #f9e68c;
+  font-weight: 600;
+}
+
+/* Content */
+.admin-content {
+  flex: 1;
+  padding: 40px;
+  background-color: #fefae0;
+}
+
+.admin-content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #3b3200;
+}
+
+.admin-box {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(180, 170, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.admin-box label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 500;
+  color: #444;
+}
+
+.admin-box input,
+.admin-box select,
+.admin-box textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #cccaa3;
+  background-color: #fffdf3;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.admin-box textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+.admin-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.admin-btn:hover {
+  background-color: #ffd633;
+}
+
+.request-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffdf3;
+  padding: 14px 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.request-item button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button.approve {
+  background-color: #c0f5b3;
+}
+
+button.approve:hover {
+  background-color: green;
+}
+
+button.decline {
+  background-color: #f5b3b3;
+}
+
+/* Calendar Container */
+.calendar-container {
+  margin-top: 10px;
+}
+
+.custom-calendar {
+  border: none !important;
+  background-color: #fffdf3;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.custom-calendar .react-calendar__tile--now {
+  background: var(--accent) !important;
+  color: var(--text-dark) !important;
+  border-radius: 999px;
+}
+
+.custom-calendar .react-calendar__tile--active {
+  background: #87b5ff !important;
+  color: #000 !important;
+  border-radius: 999px;
+}
+
+/* Dropdown */
+.styled-select {
+  appearance: none;
+  background-color: #fffdf3;
+  border: 1px solid #cccaa3;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+/* Collapse Button */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.collapse-btn {
+  font-size: 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 6px;
+  color: #5a4e00;
+}
+
+.admin-sidebar.collapsed {
+  width: 70px;
+  transition: width 0.3s ease;
+}
+
+.admin-sidebar {
+  width: 240px;
+  transition: width 0.3s ease;
+  background-color: #fffbe7;
+  padding: 30px 20px;
+  border-right: 1px solid #f3e7c5;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.admin-tabs li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-tabs li .icon {
+  font-size: 18px;
+}
+
+.admin-tabs li .label {
+  transition: opacity 0.2s ease;
+}
+
+.admin-sidebar.collapsed .label {
+  display: none;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  .admin-wrapper {
+    flex-direction: column;
+  }
+
+  .admin-sidebar,
+  .admin-sidebar.collapsed {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 12px;
+  }
+
+  .admin-content {
+    padding: 24px;
+  }
+}
+
+/* Fix sidebar behavior in mobile */
+@media (max-width: 1024px) {
+  .admin-wrapper {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid #f3e7c5;
+  }
+
+  .admin-sidebar.collapsed {
+    width: 100%;
+  }
+
+  .admin-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .admin-tabs li {
+    flex: 1 1 auto;
+    padding: 10px;
+    font-size: 0.95rem;
+    justify-content: center;
+  }
+
+  .admin-tabs li .icon {
+    font-size: 16px;
+  }
+
+  .admin-tabs li .label {
+    font-size: 0.95rem;
+  }
+
+  .sidebar-header {
+    display: none;
+  }
+}
+
+/* Tablet Size Adjustments */
+@media (max-width: 768px) {
+  .admin-content {
+    padding: 20px;
+  }
+
+  .admin-box {
+    padding: 20px;
+  }
+
+  .admin-box label {
+    font-size: 0.95rem;
+  }
+
+  .admin-box input,
+  .admin-box select,
+  .admin-box textarea {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .admin-btn {
+    font-size: 0.95rem;
+    padding: 10px 16px;
+  }
+
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .request-item button {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small screen and phone adjustments */
+@media (max-width: 480px) {
+  .admin-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .admin-box label {
+    font-size: 0.9rem;
+  }
+
+  .admin-box input,
+  .admin-box select,
+  .admin-box textarea {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+
+  .admin-btn {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .collapse-btn {
+    font-size: 18px;
+  }
+
+  .styled-select {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .custom-calendar {
+    padding: 8px;
+  }
+
+  .admin-tabs li {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .admin-tabs li .icon {
+    font-size: 14px;
+  }
+}

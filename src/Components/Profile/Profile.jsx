@@ -23,14 +23,10 @@ function Profile() {
   const [adminRequestSent, setAdminRequestSent] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
-
-    if (user.role === "admin") {
-      navigate("/admin/requests");
-    } else {
+    if (user) {
       setFormData((prev) => ({ ...prev, ...user }));
     }
-  }, [user, navigate]);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -64,7 +60,6 @@ function Profile() {
         body: JSON.stringify(formData),
       });
 
-      await getCurrentUser();
       await getCurrentUser(); // Refresh user data
       setToastMessage("✅ Profile saved successfully!");
       setToastVisible(true);
@@ -78,187 +73,134 @@ function Profile() {
     }
   };
 
-  const handleDelete = () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your profile?"
-    );
-    if (confirmDelete) {
-      logout();
-      navigate("/");
-    }
-  };
   // NEW: Handle Admin Request
-  const handleAdminRequest = async () => {
-  const reason = prompt("Why do you want to become an admin?");
-
-  if (!reason || reason.trim() === "") {
-    alert("⚠️ Please provide a reason to apply for admin.");
-    return;
-  }
-
-  try {
-    const token = localStorage.getItem("authToken");
-
-    const res = await fetch("http://localhost:5000/api/request-admin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ reason: reason.trim() }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to send admin request");
-    }
-
-    // ✅ Show success message
+  const handleAdminRequest = () => {
     setAdminRequestSent(true);
-    setToastMessage("🛡️ Admin request sent successfully. Please wait for approval.");
+    setToastMessage(
+      "🛡️ Admin request sent successfully. Please wait for approval."
+    );
     setToastVisible(true);
     setTimeout(() => {
       setToastVisible(false);
     }, 3000);
-
-  } catch (error) {
-    console.error("Error sending admin request:", error);
-    alert("❌ Failed to send admin request. Please try again later.");
-  }
-};
-
-
-
+  };
 
   return (
-  <div className="profile-wrapper">
-    <h2 className="profile-title">My Profile</h2>
+    <>
+      <div className="profile-wrapper">
+        <h2 className="profile-title">My Profile</h2>
 
-    <form className="profile-form" onSubmit={handleSubmit}>
-      <div className="profile-image-container">
-        <label className="image-upload-label">
-          <input
-            type="file"
-            accept="image/*"
-            name="profileImage"
-            onChange={handleChange}
-            hidden
-          />
-          {formData.profileImage ? (
-            <img
-              src={formData.profileImage}
-              alt="Profile"
-              className="profile-image"
+        <form className="profile-form" onSubmit={handleSubmit}>
+          <div className="profile-image-container">
+            <label className="image-upload-label">
+              <input
+                type="file"
+                accept="image/*"
+                name="profileImage"
+                onChange={handleChange}
+                hidden
+              />
+              {formData.profileImage ? (
+                <img
+                  src={formData.profileImage}
+                  alt="Profile"
+                  className="profile-image"
+                />
+              ) : (
+                <div className="profile-image-placeholder">Add Image +</div>
+              )}
+            </label>
+          </div>
+
+          <label>
+            First Name
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
             />
-          ) : (
-            <div className="profile-image-placeholder">Add Image +</div>
-          )}
-        </label>
+          </label>
+
+          <label>
+            Last Name
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            Phone
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            New Password
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            Confirm Password
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            Achievements
+            <textarea
+              name="achievements"
+              rows="4"
+              value={formData.achievements}
+              onChange={handleChange}
+              placeholder="List your achievements..."
+            />
+          </label>
+
+          <button type="submit" className="cta full save-btn">
+            Save Profile
+          </button>
+
+          <button
+            type="button"
+            className="cta full save-btn"
+            onClick={handleAdminRequest}
+            disabled={adminRequestSent}
+          >
+            Request Admin Access
+          </button>
+        </form>
+
+        {toastVisible && <div className="profile-toast">{toastMessage}</div>}
       </div>
-
-      <label>
-        First Name
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Last Name
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Email
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Phone
-        <input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        New Password
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Confirm Password
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Achievements
-        <textarea
-          name="achievements"
-          rows="4"
-          value={formData.achievements}
-          onChange={handleChange}
-          placeholder="List your achievements..."
-        />
-      </label>
-
-      <button type="submit" className="cta full save-btn">
-        Save Profile
-      </button>
-    </form>
-
-    {/* Admin Request Section */}
-    {!adminRequestSent && user && user.role !== "admin" && (
-      <button
-        type="button"
-        className="cta full admin-request-btn"
-        onClick={handleAdminRequest}
-      >
-        Request Admin Access
-      </button>
-    )}
-
-    {adminRequestSent && (
-      <div className="profile-toast">✅ Applied for admin role!</div>
-    )}
-
-    {/* Delete Profile */}
-    <button
-      type="button"
-      className="cta full delete-btn"
-      onClick={handleDelete}
-    >
-      Delete Profile
-    </button>
-
-    {/* Toast Message */}
-    {toastVisible && <div className="profile-toast">{toastMessage}</div>}
-  </div>
-);
+    </>
+  );
 }
 
 export default Profile;

@@ -17,22 +17,34 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Keep your existing password hashing middleware
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next(); // only hash if password is modified
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        return next(err);
+    }
 });
+
 
 // Add method to update profile without affecting auth fields
 userSchema.methods.updateProfile = async function(profileData) {
-  const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year'];
-  allowedUpdates.forEach(field => {
-    if (profileData[field] !== undefined) {
-      this[field] = profileData[field];
+    const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year', 'password'];
+    for (const field of allowedUpdates) {
+        if (profileData[field] !== undefined) {
+            if (field === 'password') {
+                const salt = await bcrypt.genSalt(10);
+                this.password = await bcrypt.hash(profileData.password, salt);
+            } else {
+                this[field] = profileData[field];
+            }
+        }
     }
-  });
-  return this.save();
+    return this.save();
 };
+
 
 module.exports = mongoose.model("User", userSchema);

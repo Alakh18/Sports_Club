@@ -5,10 +5,13 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require("./models/User.js");
-
+const AdminRequest = require("./models/adminrequest.js"); // ⬅️ Import admin request model
+const Event = require("./models/Event.js");
+const sportRoutes = require('./routes/sportRoutes');
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use('/api/sports', sportRoutes);
 // Middleware
 app.use(cors({
   origin: "http://localhost:5173",
@@ -161,13 +164,30 @@ app.get("/api/users/me", authenticate, async (req, res) => {
   }
 });
 
-// UPDATE profile
+// Update user profile
+// Update user profile
 app.put("/api/users/profile", authenticate, async (req, res) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    await user.updateProfile(req.body);
+        const { email, password, ...otherProfileData } = req.body;
+
+        // Update profile fields (firstName, lastName, etc.)
+        await user.updateProfile(otherProfileData); // uses your custom method
+
+        // Update email if provided
+        if (email) {
+            user.email = email;
+        }
+
+        // Update password if provided
+        if (password) {
+    user.password = password; // let pre-save hook handle hashing
+}
+
+
+        await user.save(); // triggers pre-save middleware (but we hash manually, so it's safe)
 
     const updatedUser = await User.findById(req.userId).select("-password");
     res.json(updatedUser);
@@ -179,6 +199,86 @@ app.put("/api/users/profile", authenticate, async (req, res) => {
 
 
 
+// =======================================
+// 🆕 ADMIN REQUEST SYSTEM STARTS HERE
+// =======================================
+
+// ✉️ User requests admin access
+app.post("/api/request-admin", authenticate, async (req, res) => {
+    const { reason } = req.body;
+
+    try {
+        const existing = await AdminRequest.findOne({ user: req.userId });
+        if (existing) {
+            return res.status(400).json({ error: "Request already submitted" });
+        }
+
+        const request = new AdminRequest({ user: req.userId, reason });
+        await request.save();
+
+        res.status(201).json({ message: "Admin request submitted successfully" });
+    } catch (err) {
+        console.error("Admin request error:", err);
+        res.status(500).json({ error: "Server error during admin request submission" });
+    }
+});
+
+// 👁️ Admin views all admin requests
+app.get("/api/admin/requests", authenticate, isAdmin, async (req, res) => {
+    try {
+        // <<<<<<<<<<<<<<<<<<<<<<<< THE CRITICAL CHANGE IS HERE >>>>>>>>>>>>>>>>>>>>>>>>>>
+        // ONLY FETCH REQUESTS THAT HAVE A 'PENDING' STATUS
+        const requests = await AdminRequest.find({ status: 'pending' }) // <-- Added the filter!
+            .populate("user", "admission email role")
+            .sort({ createdAt: -1 }); // Sort by newest first
+
+        res.json(requests); // This will return an empty array if no pending requests exist
+    } catch (err) {
+        console.error("Error fetching admin requests:", err);
+        res.status(500).json({ error: "Failed to fetch admin requests" });
+    }
+});
+
+// ✅ Admin approves request & promotes user
+app.put("/api/admin/requests/approve/:id", authenticate, isAdmin, async (req, res) => {
+    try {
+        const request = await AdminRequest.findById(req.params.id);
+        if (!request) return res.status(404).json({ error: "Admin request not found" });
+
+        // Update user's role to 'admin'
+        const user = await User.findByIdAndUpdate(request.user, { role: 'admin' }, { new: true });
+        if (!user) return res.status(404).json({ error: "Associated user not found" });
+
+        // Update request status to 'approved'
+        request.status = "approved";
+        await request.save();
+
+        res.json({ message: `${user.admission} is now an admin. Request approved.` });
+    } catch (err) {
+        console.error("Error approving admin request:", err);
+        res.status(500).json({ error: "Failed to approve request" });
+    }
+});
+
+// ❌ Admin rejects request (deletes the request)
+app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res) => {
+    try {
+        const request = await AdminRequest.findById(req.params.id);
+        if (!request) return res.status(404).json({ error: "Admin request not found" });
+
+        // Delete the request from the database
+        await request.deleteOne();
+
+        res.json({ message: "Request rejected and deleted successfully" });
+    } catch (err) {
+        console.error("Error rejecting admin request:", err);
+        res.status(500).json({ error: "Failed to reject request" });
+    }
+});
+
+// =======================================
+
+// Start the server
 app.listen(port, () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });

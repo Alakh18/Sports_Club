@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import { useNavigate } from "react-router-dom";
-import "./Profile.css" 
+import "./Profile.css";
 
 function Profile() {
-  const { user, login, logout } = useUser();
+  const { user, login, logout, getCurrentUser } = useUser();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,12 +19,18 @@ function Profile() {
   });
 
   const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [adminRequestSent, setAdminRequestSent] = useState(false);
 
   useEffect(() => {
-    if (user) {
+    if (!user) return;
+
+    if (user.role === "admin") {
+      navigate("/admin/requests");
+    } else {
       setFormData((prev) => ({ ...prev, ...user }));
     }
-  }, [user]);
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -39,39 +45,38 @@ function Profile() {
     }
   };
 
-const { getCurrentUser } = useUser();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    if (formData.password && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
 
-  if (formData.password && formData.password !== formData.confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
+    try {
+      const token = localStorage.getItem("authToken");
+      await fetch("/api/users/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
-  try {
-    const token = localStorage.getItem("authToken");
-    await fetch("/api/users/profile", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(formData)
-    });
-
-    await getCurrentUser(); // Refresh user data
-    setToastVisible(true);
-    setTimeout(() => {
-      setToastVisible(false);
-      navigate("/");
-    }, 2000);
-  } catch (err) {
-    console.error("Error: Failed to update profile", err);
-    alert("Something went wrong while saving profile.");
-  }
-};
-
+      await getCurrentUser();
+      await getCurrentUser(); // Refresh user data
+      setToastMessage("✅ Profile saved successfully!");
+      setToastVisible(true);
+      setTimeout(() => {
+        setToastVisible(false);
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.error("Error: Failed to update profile", err);
+      alert("Something went wrong while saving profile.");
+    }
+  };
 
   const handleDelete = () => {
     const confirmDelete = window.confirm(
@@ -82,123 +87,178 @@ const handleSubmit = async (e) => {
       navigate("/");
     }
   };
+  // NEW: Handle Admin Request
+  const handleAdminRequest = async () => {
+  const reason = prompt("Why do you want to become an admin?");
+
+  if (!reason || reason.trim() === "") {
+    alert("⚠️ Please provide a reason to apply for admin.");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const res = await fetch("http://localhost:5000/api/request-admin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ reason: reason.trim() }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to send admin request");
+    }
+
+    // ✅ Show success message
+    setAdminRequestSent(true);
+    setToastMessage("🛡️ Admin request sent successfully. Please wait for approval.");
+    setToastVisible(true);
+    setTimeout(() => {
+      setToastVisible(false);
+    }, 3000);
+
+  } catch (error) {
+    console.error("Error sending admin request:", error);
+    alert("❌ Failed to send admin request. Please try again later.");
+  }
+};
+
+
+
 
   return (
-    <>
-      <div className="profile-wrapper">
-        <h2 className="profile-title">My Profile</h2>
+  <div className="profile-wrapper">
+    <h2 className="profile-title">My Profile</h2>
 
-        <form className="profile-form" onSubmit={handleSubmit}>
-          <div className="profile-image-container">
-            <label className="image-upload-label">
-              <input
-                type="file"
-                accept="image/*"
-                name="profileImage"
-                onChange={handleChange}
-                hidden
-              />
-              {formData.profileImage ? (
-                <img
-                  src={formData.profileImage}
-                  alt="Profile"
-                  className="profile-image"
-                />
-              ) : (
-                <div className="profile-image-placeholder">Add Image +</div>
-              )}
-            </label>
-          </div>
-
-          <label>
-            First Name
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
+    <form className="profile-form" onSubmit={handleSubmit}>
+      <div className="profile-image-container">
+        <label className="image-upload-label">
+          <input
+            type="file"
+            accept="image/*"
+            name="profileImage"
+            onChange={handleChange}
+            hidden
+          />
+          {formData.profileImage ? (
+            <img
+              src={formData.profileImage}
+              alt="Profile"
+              className="profile-image"
             />
-          </label>
-
-          <label>
-            Last Name
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            Email
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            Phone
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            New Password
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            Confirm Password
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-          </label>
-
-          <label>
-            Achievements
-            <textarea
-              name="achievements"
-              rows="4"
-              value={formData.achievements}
-              onChange={handleChange}
-              placeholder="List your achievements..."
-            />
-          </label>
-
-          <button type="submit" className="cta full save-btn">
-            Save Profile
-          </button>
-          <button
-            type="button"
-            className="cta full delete-btn"
-            onClick={handleDelete}
-          >
-            Delete Profile
-          </button>
-        </form>
-
-        {toastVisible && (
-          <div className="profile-toast">✅ Profile saved successfully!</div>
-        )}
+          ) : (
+            <div className="profile-image-placeholder">Add Image +</div>
+          )}
+        </label>
       </div>
-    </>
-  );
+
+      <label>
+        First Name
+        <input
+          type="text"
+          name="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Last Name
+        <input
+          type="text"
+          name="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Email
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Phone
+        <input
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        New Password
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Confirm Password
+        <input
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Achievements
+        <textarea
+          name="achievements"
+          rows="4"
+          value={formData.achievements}
+          onChange={handleChange}
+          placeholder="List your achievements..."
+        />
+      </label>
+
+      <button type="submit" className="cta full save-btn">
+        Save Profile
+      </button>
+    </form>
+
+    {/* Admin Request Section */}
+    {!adminRequestSent && user && user.role !== "admin" && (
+      <button
+        type="button"
+        className="cta full admin-request-btn"
+        onClick={handleAdminRequest}
+      >
+        Request Admin Access
+      </button>
+    )}
+
+    {adminRequestSent && (
+      <div className="profile-toast">✅ Applied for admin role!</div>
+    )}
+
+    {/* Delete Profile */}
+    <button
+      type="button"
+      className="cta full delete-btn"
+      onClick={handleDelete}
+    >
+      Delete Profile
+    </button>
+
+    {/* Toast Message */}
+    {toastVisible && <div className="profile-toast">{toastMessage}</div>}
+  </div>
+);
 }
 
 export default Profile;

@@ -1,0 +1,243 @@
+root {
+--primary: #0d1b2a;
+--accent: #ffd700;
+--secondary: #d72638;
+--background: #FAF0E6; /* Updated background color */
+--text-dark: #2c2c2c;
+--text-light: #ffffff;
+}
+/* Overall Page Layout Container */
+/* This acts as the main wrapper for the entire calendar page content.
+   It establishes the flex container for the two main columns (sidebar and events). */
+.main-calendar-layout {
+  display: flex;
+  flex-direction: column; /* Default to stacking columns on small screens */
+  align-items: center; /* Center items when stacked vertically */
+  gap: 40px; /* Space between the two main columns when stacked or horizontal */
+  padding: 40px 20px; /* Overall padding for the entire section */
+  background-color: var(--background);
+  min-height: 100vh; /* Ensure it takes at least the full viewport height */
+  box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* Page Content Wrapper - Used to limit max-width and center the main content */
+/* This effectively replaces the 'max-w-6xl mx-auto' concept from Tailwind */
+.page-content-wrapper {
+  display: flex; /* Enables side-by-side columns on larger screens */
+  flex-direction: column; /* Stacks columns by default */
+  align-items: flex-start; /* Aligns contents to the start within this wrapper */
+  gap: 40px; /* Space between the calendar sidebar and the events column */
+  width: 100%; /* Take full width up to max-width */
+  max-width: 1200px; /* Maximum width for the entire two-column content */
+  margin: 0 auto; /* Centers the content wrapper horizontally */
+}
+
+
+/* Calendar and Sidebar Container (Left Column) */
+/* This div holds the calendar box AND the selected date/add event box.
+   It defines the styling for the entire left column 'card'. */
+.calendar-sidebar-container {
+  display: flex;
+  flex-direction: column; /* Stacks the calendar-box and selected-date-box vertically */
+  align-items: center; /* Centers items (calendar, selected date box) within this column */
+  gap: 30px; /* Space between the calendar-box and selected-date-box */
+  
+  /* Styling for the overall "card" appearance of the sidebar */
+  background-color: #ffffff; /* White background for the entire sidebar card */
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 20px; /* Padding inside this sidebar card */
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.05);
+
+  width: 100%; /* Default to full width on small screens */
+  max-width: 400px; /* Max width for the entire sidebar column on smaller screens, adjusted for wider feel */
+  box-sizing: border-box; /* Include padding and border in element's total width */
+}
+
+
+/* Calendar box - Specific styling for the react-calendar component's wrapper */
+.calendar-box {
+  width: 100%; /* Ensures it fills the .calendar-sidebar-container */
+  /* No specific background, border, padding, or box-shadow here, as .calendar-sidebar-container now handles it */
+}
+
+/* Selected date panel - Specific styling for the date display and add event button */
+.selected-date-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%; /* Ensures it fills the .calendar-sidebar-container */
+  /* No specific background, border, padding, or box-shadow here, as .calendar-sidebar-container now handles it */
+}
+
+.selected-label {
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.selected-date {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-light);
+  background-color: var(--primary);
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Add Event Button */
+.add-event-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Make button fill its container */
+  margin-top: 10px;
+}
+
+.add-event-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Event List and Tracked Events Container (Right Column) */
+/* This container wraps both the event list and tracked events, forming the right column */
+.events-column-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex-grow: 1; /* Allows this column to take up remaining space when horizontal */
+  width: 100%; /* Default to full width on small screens */
+  max-width: 800px; /* Maximum width for the events column content on larger screens */
+  box-sizing: border-box;
+}
+
+/* Shared section containers for individual event lists */
+.event-list-container,
+.tracked-container {
+  width: 100%;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.05);
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Section headings */
+.event-title,
+.tracked-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+/* Event/Tracked Lists */
+.event-list,
+.tracked-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-card,
+.tracked-card {
+  background-color: #f8f8f8;
+  border: 1px solid #e2e2e2;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.event-card:last-child,
+.tracked-card:last-child {
+  margin-bottom: 0;
+}
+
+.event-card:hover,
+.tracked-card:hover {
+  background-color: #f0f0f0;
+}
+
+/* Track/Untrack Button */
+.track-btn {
+  background-color: var(--accent);
+  color: var(--text-dark);
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.track-btn:hover {
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+/* Calendar Base Styling (for react-calendar component) */
+.custom-calendar {
+  width: 100%; /* Ensures it fits within its .calendar-box parent */
+  font-family: "Poppins", sans-serif;
+  background-color: #fdfdfd;
+  border: none;
+}
+
+/* Highlight today */
+.highlight-today {
+  background: linear-gradient(to right, var(--accent), var(--secondary));
+  color: var(--text-light) !important;
+  font-weight: bold;
+  border-radius: 50%;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) { /* Medium screens and up */
+  .page-content-wrapper {
+    flex-direction: row; /* Layout columns horizontally */
+    align-items: flex-start;
+  }
+
+  /* Calendar Sidebar (Left Column) - Make it wider */
+  .calendar-sidebar-container {
+    flex-shrink: 0; /* Prevent it from shrinking */
+    flex-basis: 450px; /* **Increased preferred width for desktop** */
+    width: auto; /* Allow flex-basis to control width */
+    max-width: 450px; /* **New: Cap its max width on desktop too, for consistency** */
+  }
+
+  /* Event List and Tracked Events (Right Column) - Take remaining space */
+  .events-column-wrapper {
+    flex-grow: 1; /* Allows it to take up remaining space */
+    flex-shrink: 1; /* Allows it to shrink if needed */
+    flex-basis: auto; /* Let it grow/shrink based on available space */
+    width: auto; /* Reset width as flex-grow takes over */
+    max-width: none; /* Remove max-width restriction on desktop to allow it to grow */
+  }
+}
+
+/* Additional specific overrides/adjustments for react-calendar if needed */
+.react-calendar__tile {
+  padding: 8px;
+}
+
+.react-calendar__navigation button {
+  min-width: 44px;
+}
+
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}

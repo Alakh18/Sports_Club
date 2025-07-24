@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../../context/usercontext";
-import AuthModal from "../AuthModal/AuthModal";
+import { useUser } from "../../context/usercontext.js";
+import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { handleAboutClick, goTo } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -14,21 +15,6 @@ function Header() {
   const location = useLocation();
 
   const closeMenu = () => setMenuOpen(false);
-
-  const goTo = (section) => {
-    if (location.pathname === "/") {
-      const element = document.getElementById(section);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      navigate("/", { state: { scrollTo: section } });
-    }
-  };
-
-  const handleAboutClick = (tab = "about") => {
-    navigate("/about", { state: { activeTab: tab } });
-  };
 
   const handleLogout = () => {
     logout();
@@ -62,55 +48,72 @@ function Header() {
           </button>
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
-            <Link
-              to="/"
+            <a
+              href="/"
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo("hero");
+                goTo(navigate, location, "hero");
                 closeMenu();
               }}
             >
               Home
-            </Link>
+            </a>
+
             <Link
               to="/about"
               className="header__nav-link"
               onClick={() => {
-                handleAboutClick("about");
+                handleAboutClick(navigate, location);
                 closeMenu();
               }}
             >
               About
             </Link>
-            <Link
-              to="/"
+
+            <a
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
-                goTo("sports");
+                goTo(navigate, location, "sports");
                 closeMenu();
               }}
             >
               Sports
-            </Link>
+            </a>
+
             <Link
               to="/about"
               className="header__nav-link"
               onClick={() => {
-                handleAboutClick("contact");
+                handleAboutClick(navigate, location, "contact");
                 closeMenu();
               }}
             >
               Contact
             </Link>
-            <Link 
-              to="/faq" 
-              className="header__nav-link" 
-              onClick={closeMenu}
-            >
+
+            <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
               FAQ
             </Link>
+
+            <Link
+            to="/calendar"
+            className="header__nav-link"
+            onClick={closeMenu}
+>           Calendar
+            </Link>
+
+            {user?.role === "admin" && (
+              <Link
+                to="/requests"
+                className="header__nav-link"
+                onClick={closeMenu}
+              >
+                Requests
+              </Link>
+            )}
 
             {!user ? (
               <>
@@ -130,34 +133,33 @@ function Header() {
             ) : (
               <div className="profile-dropdown" ref={dropdownRef}>
                 <div
-                    className="profile-icon"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    title={user.admission || "Profile"}
-                  >
-                    {user.profileImage ? (
-                      <img
-                        src={user.profileImage}
-                        alt="Profile"
-                        className="profile-image-icon"
-                      />
-                    ) : (
-                      <span>{(user.admission || "U").charAt(0)}</span>
-                    )}
-                  </div>
+                  className="profile-icon"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  title={user.admission || "Profile"}
+                >
+                  {user.profileImage ? (
+                    <img
+                      src={user.profileImage}
+                      alt="Profile"
+                      className="profile-image-icon"
+                    />
+                  ) : (
+                    <span>{(user.admission || "U").charAt(0)}</span>
+                  )}
+                </div>
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">
-                    <Link
-                      to="/profile"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Profile
-                    </Link>
-                    <button 
-                      onClick={handleLogout} 
-                      className="dropdown-item"
-                    >
+                    {user.role !== "admin" && (
+                      <Link
+                        to="/profile"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                    )}
+                    <button onClick={handleLogout} className="dropdown-item">
                       Logout
                     </button>
                   </div>
@@ -169,9 +171,15 @@ function Header() {
       </header>
 
       {authModal && (
-        <AuthModal 
-          type={authModal} 
-          onClose={() => setAuthModal(null)} 
+        <AuthModal
+          type={authModal}
+          onClose={(newType) => {
+            if (newType === "login" || newType === "signup") {
+              setAuthModal(newType);
+            } else {
+              setAuthModal(null);
+            }
+          }}
         />
       )}
     </>

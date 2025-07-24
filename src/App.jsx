@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { enableSmoothNavLinks } from "./utils/ui";
+import AdminRequests from "./Components/AdminRequests/AdminRequests.jsx";
 
 import Header from "./Components/Header/Header.jsx";
 import About from "./Components/About/About.jsx";
@@ -12,6 +13,7 @@ import PrivateRoute from "./Components/PrivateRoute.jsx";
 import FAQ from "./Components/FAQ/FAQ.jsx";
 import Sports from "./Components/Sports/Sports.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
+import CalendarPage from "./Components/CalendarPage/CalendarPage.jsx";
 
 function App() {
   useEffect(() => {
@@ -47,7 +49,18 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/sports/:sportName" element={<Sports />} />
-      </Routes>
+        <Route path="/calendar" element={<CalendarPage />} />
+      
+      <Route
+  path="/requests"
+  element={
+    <PrivateRoute>
+      <AdminRequests />
+    </PrivateRoute>
+  }
+  
+/></Routes>
+
       <Footer />
     </div>
   );

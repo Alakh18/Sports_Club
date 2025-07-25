@@ -6,15 +6,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-<<<<<<< HEAD
-=======
 
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js");
 const Event = require("./models/Event.js");
 const sportRoutes = require('./routes/sportRoutes');
 
->>>>>>> 8c88897bc0c6667ce029d993129a148e65071f82
 const app = express();
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminRequest.js"); 

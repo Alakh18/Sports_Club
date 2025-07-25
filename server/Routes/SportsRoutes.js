@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Sport = require("../models/sports");
 
-// GET all sports
+
 router.get("/", async (req, res) => {
   try {
     const sports = await Sport.find().populate("events.trackedBy", "name email");

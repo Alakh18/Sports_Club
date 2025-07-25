@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { enableSmoothNavLinks } from "./utils/ui";
-import AdminRequests from "./Components/AdminRequests/AdminRequests.jsx";
-import NoticeBoard from "./Components/NoticeBoard/NoticeBoard.jsx";
 
 import Header from "./Components/Header/Header.jsx";
 import About from "./Components/About/About.jsx";
@@ -14,13 +12,14 @@ import PrivateRoute from "./Components/PrivateRoute.jsx";
 import FAQ from "./Components/FAQ/FAQ.jsx";
 import Sports from "./Components/Sports/Sports.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
-import CalendarPage from "./Components/CalendarPage/CalendarPage.jsx";
+import Calendar from "./Components/Calender/Calender.jsx";
+import Admin from "./Components/Admin/Admin.jsx";
 
 function App() {
   useEffect(() => {
-  fetch('/api/message')
-    .then((res) => res.json())
-    .then((data) => console.log(data.message)); 
+    fetch("/api/message")
+      .then((res) => res.json())
+      .then((data) => console.log(data.message));
   }, []);
   useEffect(() => {
     enableSmoothNavLinks();
@@ -48,20 +47,11 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
+        <Route path="/calender" element={<Calendar />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/sports/:sportName" element={<Sports />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/notices" element={<NoticeBoard  />} />
-      <Route
-  path="/requests"
-  element={
-    <PrivateRoute>
-      <AdminRequests />
-    </PrivateRoute>
-  }
-  
-/></Routes>
-
+      </Routes>
       <Footer />
     </div>
   );

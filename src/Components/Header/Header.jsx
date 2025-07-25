@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { handleAboutClick, goTo } from "../../utils/ui.js";
+import { handleAboutClick, goTo, scrollToTop } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -23,6 +23,7 @@ function Header() {
     navigate("/");
   };
 
+  // Close dropdown if clicked outside
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -49,7 +50,7 @@ function Header() {
 
           <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
             <a
-              href="/"
+              href=""
               className="header__nav-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -59,18 +60,16 @@ function Header() {
             >
               Home
             </a>
-
             <Link
               to="/about"
-              className="header__nav-link"
               onClick={() => {
                 handleAboutClick(navigate, location);
                 closeMenu();
               }}
+              className="header__nav-link"
             >
               About
             </Link>
-
             <a
               href=""
               className="header__nav-link"
@@ -82,7 +81,6 @@ function Header() {
             >
               Sports
             </a>
-
             <Link
               to="/about"
               className="header__nav-link"
@@ -93,27 +91,36 @@ function Header() {
             >
               Contact
             </Link>
-
-            <Link to="/faq" className="header__nav-link" onClick={closeMenu}>
-              FAQ
-            </Link>
-
             <Link
-            to="/calendar"
-            className="header__nav-link"
-            onClick={closeMenu}
->           Calendar
+              to="/calender"
+              className="header__nav-link"
+              onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}
+            >
+              Calender
             </Link>
-             <Link to="/notices" className="header__nav-link" onClick={closeMenu}>
-              Notice Board
+            <Link
+              to="/faq"
+              className="header__nav-link"
+              onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}
+            >
+              FAQ
             </Link>
             {user?.role === "admin" && (
               <Link
-                to="/requests"
+                to="/admin"
                 className="header__nav-link"
-                onClick={closeMenu}
+                onClick={() => {
+                  closeMenu();
+                  scrollToTop();
+                }}
               >
-                Requests
+                Admin
               </Link>
             )}
 
@@ -140,11 +147,7 @@ function Header() {
                   title={user.admission || "Profile"}
                 >
                   {user.profileImage ? (
-                    <img
-                      src={user.profileImage}
-                      alt="Profile"
-                      className="profile-image-icon"
-                    />
+                    <img src={user.profileImage} alt="Profile" />
                   ) : (
                     <span>{(user.admission || "U").charAt(0)}</span>
                   )}
@@ -152,15 +155,13 @@ function Header() {
 
                 {dropdownOpen && (
                   <div className="dropdown-menu">
-                    {user.role !== "admin" && (
-                      <Link
-                        to="/profile"
-                        className="dropdown-item"
-                        onClick={() => setDropdownOpen(false)}
-                      >
-                        Profile
-                      </Link>
-                    )}
+                    <Link
+                      to="/profile"
+                      className="dropdown-item"
+                      onClick={() => setDropdownOpen(false)}
+                    >
+                      Update Profile
+                    </Link>
                     <button onClick={handleLogout} className="dropdown-item">
                       Logout
                     </button>

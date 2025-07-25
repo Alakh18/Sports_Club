@@ -1,10 +1,12 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { goTo, scrollToTop, handleAboutClick } from "../../utils/ui";
+import { useUser } from "../../context/usercontext.js";
 import "./Footer.css";
 
 function Footer() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, logout } = useUser();
   return (
     <footer className="footer">
       <div className="footer__content">
@@ -25,7 +27,15 @@ function Footer() {
           >
             Contact
           </Link>
+          <Link to="/calender" onClick={scrollToTop}>
+            Calender
+          </Link>
           <Link to="/faq">FAQ</Link>
+          {user?.role === "admin" && (
+            <Link to="/admin" onClick={scrollToTop}>
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="footer__socials">

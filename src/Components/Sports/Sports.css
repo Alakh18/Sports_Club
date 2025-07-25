@@ -123,33 +123,51 @@
     flex-direction: column;
   }
 
+  .sidebar-container {
+    width: 100%;
+  }
+
   .sport-sidebar {
     width: 100%;
-    display: flex;
     padding: 20px;
     border-right: none;
     border-bottom: 1px solid #e5deb3;
-    overflow-x: auto;
+    display: block;
+    box-shadow: none;
   }
 
   .sport-section-tabs {
-    display: flex;
-    gap: 12px;
-    flex-grow: 1;
-    justify-content: space-around;
+    display: block;
   }
 
   .sport-section-tabs li {
-    margin-bottom: 0;
-    white-space: nowrap;
-    padding: 10px 12px;
-  }
-
-  .sport-section-content {
-    padding: 30px 20px;
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    font-size: 1rem;
   }
 
   .sidebar-toggle-btn {
-    display: none;
+    display: block;
+    top: 10px;
+    transform: scale(0.9);
+    z-index: 20;
+  }
+
+  .sport-section-content {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sport-sidebar-title {
+    font-size: 1.25rem;
+  }
+
+  .sport-section-content h3 {
+    font-size: 1.5rem;
+  }
+
+  .sport-section-content p {
+    font-size: 1rem;
   }
 }

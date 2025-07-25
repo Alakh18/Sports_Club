@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   // Authentication fields
@@ -11,11 +11,13 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, trim: true },
   lastName: { type: String, trim: true },
   phone: { type: String, trim: true },
-  profileImage: { type: String },
+  profileImage: { type: String }, // Can hold Cloudinary URL
   achievements: { type: String },
+  department: { type: String },
+  year: { type: String },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
 
-  // New: Tracked events by the user
+  // Tracked events by the user
   trackedEvents: [
     {
       sportId: { type: mongoose.Schema.Types.ObjectId, ref: "Sport" },
@@ -26,22 +28,26 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }, { timestamps: true });
 
-// Password hashing
+// Password hashing middleware (only hashes if modified)
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    return next(err);
+  }
 });
 
-// Update profile fields only
+// Update profile method — no double hashing!
 userSchema.methods.updateProfile = async function(profileData) {
-  const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year'];
-  allowedUpdates.forEach(field => {
+  const allowedUpdates = ['firstName', 'lastName', 'phone', 'profileImage', 'achievements', 'department', 'year', 'password'];
+  for (const field of allowedUpdates) {
     if (profileData[field] !== undefined) {
-      this[field] = profileData[field];
+      this[field] = profileData[field]; // Password will be hashed automatically by pre('save')
     }
-  });
+  }
   return this.save();
 };
 

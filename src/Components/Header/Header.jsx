@@ -104,7 +104,9 @@ function Header() {
             onClick={closeMenu}
 >           Calendar
             </Link>
-
+             <Link to="/notices" className="header__nav-link" onClick={closeMenu}>
+              Notice Board
+            </Link>
             {user?.role === "admin" && (
               <Link
                 to="/requests"

@@ -1,4 +1,3 @@
-// NoticeBoard.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./NoticeBoard.css";
@@ -14,8 +13,21 @@ export default function NoticeBoard({ user }) {
   }, [user]);
 
   const fetchNotices = async () => {
-    const res = await axios.get("/api/notices");
-    setNotices(res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    try {
+      const res = await axios.get("/api/notices");
+      setNotices(res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    } catch (err) {
+      console.error("Failed to fetch notices", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/notices/${id}`);
+      fetchNotices();
+    } catch (err) {
+      console.error("Failed to delete notice", err);
+    }
   };
 
   return user ? (
@@ -26,12 +38,15 @@ export default function NoticeBoard({ user }) {
 
       {open && (
         <div className="noticeboard-content">
-          <h3>Notice Board</h3>
+          <h3>📢 Notice Board</h3>
           <ul className="notice-list">
             {notices.map((n) => (
               <li key={n._id}>
-                <strong>{n.title}</strong>
+                <strong>{n.title}</strong>{" "}
                 <a href={n.fileUrl} target="_blank" rel="noopener noreferrer">View</a>
+                {isAdmin && (
+                  <button className="delete-btn" onClick={() => handleDelete(n._id)}>🗑</button>
+                )}
               </li>
             ))}
           </ul>
@@ -52,20 +67,23 @@ export default function NoticeBoard({ user }) {
 
 function AddNoticeForm({ onSuccess }) {
   const [title, setTitle] = useState("");
-  const [section, setSection] = useState("");
   const [file, setFile] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("title", title);
-    formData.append("section", section);
+    formData.append("section", "general"); // 👈 hardcoded as per enum
     formData.append("file", file);
-    await axios.post("/api/notices", formData);
-    setTitle("");
-    setSection("");
-    setFile(null);
-    onSuccess();
+
+    try {
+      await axios.post("/api/notices", formData);
+      setTitle("");
+      setFile(null);
+      onSuccess();
+    } catch (err) {
+      console.error("Failed to upload notice", err);
+    }
   };
 
   return (
@@ -77,13 +95,12 @@ function AddNoticeForm({ onSuccess }) {
         onChange={(e) => setTitle(e.target.value)}
         required
       />
-      <select value={section} onChange={(e) => setSection(e.target.value)} required>
-        <option value="">Select Section</option>
-        <option value="Sports">Sports</option>
-        <option value="Academics">Academics</option>
-        <option value="General">General</option>
-      </select>
-      <input type="file" accept=".pdf,.png,.jpg" onChange={(e) => setFile(e.target.files[0])} required />
+      <input
+        type="file"
+        accept=".pdf,.png,.jpg"
+        onChange={(e) => setFile(e.target.files[0])}
+        required
+      />
       <button type="submit">Upload Notice</button>
     </form>
   );

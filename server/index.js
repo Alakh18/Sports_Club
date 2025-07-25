@@ -4,11 +4,16 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require("./models/User.js");
-const AdminRequest = require("./models/adminrequest.js"); // ⬅️ Import admin request model
-const Event = require("./models/Event.js");
-
 const app = express();
+const User = require("./models/User.js");
+const AdminRequest = require("./models/adminrequest.js"); 
+const Event = require("./models/sports.js");
+const sportRoutes = require("./Routes/SportsRoutes.js");
+app.use("/api/sports", sportRoutes);
+const noticeRoutes =require("./Routes/noticeRoutes.js");
+app.use("/api/notices", noticeRoutes);
+app.use("/uploads", express.static("uploads"));
+
 const port = process.env.PORT || 5000;
 
 // Middleware

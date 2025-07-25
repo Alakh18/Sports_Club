@@ -17,7 +17,7 @@ import Admin from "./Components/Admin/Admin.jsx";
 
 function App() {
   useEffect(() => {
-    fetch("/api/message")
+    fetch("http://localhost:5000/api/sports")
       .then((res) => res.json())
       .then((data) => console.log(data.message));
   }, []);

@@ -15,9 +15,6 @@ const sportRoutes = require('./routes/sportRoutes');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Routes
-app.use('/api/sports', sportRoutes);
-
 // Middleware
 app.use(cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
@@ -28,6 +25,9 @@ app.use(cors({
 
 // JSON body parser with 10MB limit
 app.use(express.json({ limit: '10mb' }));
+
+// Routes
+app.use('/api/sports', sportRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/sports-club", {

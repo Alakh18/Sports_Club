@@ -7,18 +7,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
-
+const User = require("./models/User.js");
+const AdminRequest = require("./models/adminrequest.js");
+const sportRoutes = require('./routes/sportRoutes');
 
 const app = express();
-const User = require("./models/User.js");
-const AdminRequest = require("./models/adminRequest.js"); 
-const Event = require("./models/sports.js");
-const sportRoutes = require("./Routes/SportsRoutes.js");
-app.use("/api/sports", sportRoutes);
-
-app.use("/uploads", express.static("uploads"));
-
 const port = process.env.PORT || 5000;
 
 // Middleware

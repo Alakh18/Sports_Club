@@ -8,10 +8,13 @@ export default function Sports() {
   const { sportName } = useParams();
   const [activeSection, setActiveSection] = useState("Events");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedEventId, setSelectedEventId] = useState(null);
-  //const [sportId, setSportId] = useState(null);
+  const [expandedEvent, setExpandedEvent] = useState(null);
   const [events, setEvents] = useState([]);
   const [gallery, setGallery] = useState([]);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const isLoggedIn = !!localStorage.getItem("token");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/sports")
@@ -20,7 +23,6 @@ export default function Sports() {
         const matchedSport = data.find(
           (sport) => sport.name.toLowerCase() === sportName.toLowerCase()
         );
-        // After finding matchedSport
         if (matchedSport && matchedSport._id) {
           fetch(`http://localhost:5000/api/sports/${matchedSport._id}/gallery`)
             .then((res) => res.json())
@@ -36,10 +38,22 @@ export default function Sports() {
       .catch((err) => console.error("Error fetching sports:", err));
   }, [sportName]);
 
+  const handleImageClick = (img) => {
+    setSelectedImage(img);
+    setShowImageModal(true);
+  };
+
+  const handleRegisterClick = (eventId) => {
+    if (!isLoggedIn) {
+      alert("Please login to register.");
+    } else {
+      alert(`Registered for event: ${eventId}`);
+    }
+  };
+
   return (
     <div className="sport-detail-wrapper">
       <div className={`sidebar-container ${!sidebarOpen ? "collapsed" : ""}`}>
-        {/* Sidebar */}
         <aside className="sport-sidebar">
           <h2 className="sport-sidebar-title">{sportName?.toUpperCase()}</h2>
           <ul className="sport-section-tabs">
@@ -55,7 +69,6 @@ export default function Sports() {
           </ul>
         </aside>
 
-        {/* Toggle Button */}
         <button
           className="sidebar-toggle-btn"
           onClick={() => setSidebarOpen((prev) => !prev)}
@@ -64,24 +77,35 @@ export default function Sports() {
         </button>
       </div>
 
-      {/* Main Content */}
       <main className="sport-section-content">
         {activeSection === "Events" && (
           <div>
             <h3>Events</h3>
             {events.length === 0 ? (
-              <p>No events found.</p>
+              <p>No events available.</p>
             ) : (
-              <ul>
+              <div className="events-list">
                 {events.map((event) => (
-                  <li key={event._id}>
-                    <strong>{event.name}</strong> — {event.date}, {event.time}
-                    <br />
-                    📍 {event.location} <br />
-                    🎯 {event.eligibility}
-                  </li>
+                  <div
+                    key={event._id}
+                    className="events-card"
+                    onClick={() =>
+                      setExpandedEvent(
+                        expandedEvent === event._id ? null : event._id
+                      )
+                    }
+                  >
+                    <h4>{event.eventName}</h4>
+                    {expandedEvent === event._id && (
+                      <div className="events-details">
+                        <p>Date: {event.date}</p>
+                        <p>Time: {event.time}</p>
+                        <p>Location: {event.location}</p>
+                      </div>
+                    )}
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
         )}
@@ -92,13 +116,23 @@ export default function Sports() {
             {gallery.length === 0 ? (
               <p>No images yet.</p>
             ) : (
-              <div className="gallery-grid">
+              <div className="gallery-list">
                 {gallery.map((img) => (
-                  <div key={img._id} className="gallery-item">
-                    <img src={img.image} alt={img.caption} />
-                    <p>{img.caption}</p>
+                  <div
+                    key={img._id}
+                    className="gallery-card"
+                    onClick={() => handleImageClick(img)}
+                  >
+                    <img src={img.image} alt="gallery" />
+                    <div className="gallery-description">{img.description}</div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {showImageModal && selectedImage && (
+              <div className="image-modal" onClick={() => setShowImageModal(false)}>
+                <img src={selectedImage.image} alt="modal" />
               </div>
             )}
           </div>
@@ -106,39 +140,23 @@ export default function Sports() {
 
         {activeSection === "Registration" && (
           <div>
-            <h3>Register for an Event</h3>
+            <h3>Register</h3>
             {events.length === 0 ? (
               <p>No events available for registration.</p>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (!selectedEventId) {
-                    alert("Please select an event to register.");
-                    return;
-                  }
-                  // You can call your POST registration API here
-                  alert(`You registered for event ID: ${selectedEventId}`);
-                }}
-              >
-                <div className="event-registration-list">
-                  {events.map((event) => (
-                    <label key={event._id} className="event-radio-option">
-                      <input
-                        type="radio"
-                        name="event"
-                        value={event._id}
-                        onChange={() => setSelectedEventId(event._id)}
-                      />
-                      <strong>{event.name}</strong> — {event.date} at{" "}
-                      {event.time}
-                    </label>
-                  ))}
-                </div>
-                <button type="submit" className="register-btn">
-                  Register
-                </button>
-              </form>
+              <div className="registration-list">
+                {events.map((event) => (
+                  <div
+                    key={event._id}
+                    className="registration-card"
+                    onClick={() =>
+                      isLoggedIn ? handleRegisterClick(event._id) : alert("Please login to register.")
+                    }
+                  >
+                    {event.eventName}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
@@ -146,16 +164,17 @@ export default function Sports() {
         {activeSection === "Eligibility" && (
           <div>
             <h3>Eligibility</h3>
-            {events.length > 0 ? (
-              <ul>
-                {events.map((event) => (
-                  <li key={event._id}>
-                    {event.name}: {event.eligibility}
-                  </li>
-                ))}
-              </ul>
+            {events.length === 0 ? (
+              <p>No eligibility data available.</p>
             ) : (
-              <p>No eligibility info available.</p>
+              <div className="eligibility-list">
+                {events.map((event) => (
+                  <div key={event._id} className="eligibility-card">
+                    <h4>{event.eventName}</h4>
+                    <p>{event.eligibility}</p>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}

@@ -25,7 +25,13 @@ function Footer() {
           >
             Contact
           </Link>
+          <Link to="/calender" onClick={scrollToTop}>
+            Calender
+          </Link>
           <Link to="/faq">FAQ</Link>
+          <Link to="/admin" onClick={scrollToTop}>
+            Admin
+          </Link>
         </nav>
 
         <div className="footer__socials">

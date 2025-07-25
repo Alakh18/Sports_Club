@@ -12,12 +12,14 @@ import PrivateRoute from "./Components/PrivateRoute.jsx";
 import FAQ from "./Components/FAQ/FAQ.jsx";
 import Sports from "./Components/Sports/Sports.jsx";
 import Footer from "./Components/Footer/Footer.jsx";
+import Calendar from "./Components/Calender/Calender.jsx";
+import Admin from "./Components/Admin/Admin.jsx";
 
 function App() {
   useEffect(() => {
-  fetch('/api/message')
-    .then((res) => res.json())
-    .then((data) => console.log(data.message)); 
+    fetch("/api/message")
+      .then((res) => res.json())
+      .then((data) => console.log(data.message));
   }, []);
   useEffect(() => {
     enableSmoothNavLinks();
@@ -45,6 +47,8 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
+        <Route path="/calender" element={<Calendar />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/sports/:sportName" element={<Sports />} />
       </Routes>

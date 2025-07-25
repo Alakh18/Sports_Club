@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/usercontext.js";
 import AuthModal from "../AuthModal/AuthModal.jsx";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { handleAboutClick, goTo } from "../../utils/ui.js";
+import { handleAboutClick, goTo, scrollToTop } from "../../utils/ui.js";
 import "./Header.css";
 
 function Header() {
@@ -62,7 +62,10 @@ function Header() {
             </a>
             <Link
               to="/about"
-              onClick={() => handleAboutClick(navigate, location)}
+              onClick={() => {
+                handleAboutClick(navigate, location);
+                closeMenu();
+              }}
               className="header__nav-link"
             >
               About
@@ -81,12 +84,42 @@ function Header() {
             <Link
               to="/about"
               className="header__nav-link"
-              onClick={() => handleAboutClick(navigate, location, "contact")}
+              onClick={() => {
+                handleAboutClick(navigate, location, "contact");
+                closeMenu();
+              }}
             >
               Contact
             </Link>
-            <Link to="/faq" className="header__nav-link">
+            <Link
+              to="/calender"
+              className="header__nav-link"
+              onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}
+            >
+              Calender
+            </Link>
+            <Link
+              to="/faq"
+              className="header__nav-link"
+              onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}
+            >
               FAQ
+            </Link>
+            <Link
+              to="/admin"
+              className="header__nav-link"
+              onClick={() => {
+                closeMenu();
+                scrollToTop();
+              }}
+            >
+              Admin
             </Link>
 
             {!user ? (

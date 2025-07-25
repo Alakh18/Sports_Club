@@ -12,15 +12,6 @@ const AdminRequest = require("./models/adminrequest.js");
 const sportRoutes = require('./routes/sportRoutes');
 
 const app = express();
-const User = require("./models/User.js");
-const AdminRequest = require("./models/adminRequest.js"); 
-const Event = require("./models/sports.js");
-const sportRoutes = require("./Routes/SportsRoutes.js");
-app.use("/api/sports", sportRoutes);
-const noticeRoutes =require("./Routes/noticeRoutes.js");
-app.use("/api/notices", noticeRoutes);
-app.use("/uploads", express.static("uploads"));
-
 const port = process.env.PORT || 5000;
 
 // Middleware

@@ -1,0 +1,138 @@
+/* Container */
+.profile-wrapper {
+  max-width: 600px;
+  margin: 60px auto;
+  background: #333333;
+  color: #f5f5f5;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+}
+
+/* Heading */
+.profile-title {
+  text-align: center;
+  font-size: 2rem;
+  color: gold;
+  margin-bottom: 30px;
+}
+
+/* Form layout */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+/* Inputs & Textareas */
+.profile-form input,
+.profile-form textarea {
+  padding: 12px;
+  font-size: 1rem;
+  background: #222;
+  border: 1px solid #444;
+  color: #f5f5f5;
+  border-radius: 8px;
+  transition: border 0.3s;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus {
+  border-color: gold;
+  outline: none;
+}
+
+.profile-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Profile picture */
+.profile-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-image-container img,
+.image-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid gold;
+}
+
+.image-placeholder {
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.profile-image-placeholder:hover {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+/* Buttons */
+.save-btn {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: gold;
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.save-btn:hover {
+  background-color: #ffd700;
+}
+
+.save-btn:disabled {
+  background-color: #222;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Toast */
+.profile-toast {
+  margin-top: 20px;
+  background: #222;
+  color: gold;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10%,
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

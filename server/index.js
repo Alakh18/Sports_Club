@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken');
 
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js");
-const Event = require("./models/Event.js");
 const sportRoutes = require('./routes/sportRoutes');
 
 const app = express();
@@ -248,7 +247,7 @@ app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, 
 });
 
 // --- Test Route ---
-app.get("/api/message", (req, res) => {
+app.get("/api/message", (_ , res) => {
     res.json({ message: "Hello from the backend!" });
 });
 

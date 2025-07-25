@@ -9,7 +9,7 @@ export default function Sports() {
   const [activeSection, setActiveSection] = useState("Events");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedEventId, setSelectedEventId] = useState(null);
-  const [sportId, setSportId] = useState(null);
+  //const [sportId, setSportId] = useState(null);
   const [events, setEvents] = useState([]);
   const [gallery, setGallery] = useState([]);
 
@@ -20,16 +20,17 @@ export default function Sports() {
         const matchedSport = data.find(
           (sport) => sport.name.toLowerCase() === sportName.toLowerCase()
         );
-        if (matchedSport) {
-          setSportId(matchedSport._id);
+        // After finding matchedSport
+        if (matchedSport && matchedSport._id) {
+          fetch(`http://localhost:5000/api/sports/${matchedSport._id}/gallery`)
+            .then((res) => res.json())
+            .then((galleryData) => setGallery(galleryData))
+            .catch((err) => console.error("Gallery fetch failed:", err));
 
           fetch(`http://localhost:5000/api/sports/${matchedSport._id}/events`)
             .then((res) => res.json())
-            .then((eventData) => setEvents(eventData));
-
-          fetch(`http://localhost:5000/api/sports/${matchedSport._id}/gallery`)
-            .then((res) => res.json())
-            .then((galleryData) => setGallery(galleryData));
+            .then((eventData) => setEvents(eventData))
+            .catch((err) => console.error("Events fetch failed:", err));
         }
       })
       .catch((err) => console.error("Error fetching sports:", err));

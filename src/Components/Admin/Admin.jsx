@@ -1,28 +1,77 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { FaBars } from "react-icons/fa";
 import "./Admin.css";
+
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("manage");
   const [collapsed, setCollapsed] = useState(false);
   const [selectedSport, setSelectedSport] = useState("");
   const [eventDate, setEventDate] = useState(new Date());
-  const [requests, setRequests] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  ]);
+  const [requests, setRequests] = useState([]);
+  
 
-  const handleApprove = (id) => {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
+
+
+  useEffect(() => {
+  const fetchRequests = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/admin/requests", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch requests");
+
+      const data = await res.json();
+      setRequests(data);
+    } catch (err) {
+      console.error("Failed to fetch requests:", err);
+    }
+  };
+
+  fetchRequests();
+}, []);
+
+
+
+
+
+  const handleApprove = async (id) => {
+  try {
+    await fetch(`http://localhost:5000/api/admin/requests/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: "approved" }),
+    });
+    setRequests((prev) => prev.filter((r) => r._id !== id));
     alert("Approved!");
-  };
+  } catch (err) {
+    console.error("Approval failed:", err);
+  }
+};
 
-  const handleDecline = (id) => {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
+const handleDecline = async (id) => {
+  try {
+    await fetch(`http://localhost:5000/api/admin/requests/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: "rejected" }),
+    });
+    setRequests((prev) => prev.filter((r) => r._id !== id));
     alert("Declined.");
-  };
+  } catch (err) {
+    console.error("Rejection failed:", err);
+  }
+};
 
   const handleSportChange = (e) => {
     setSelectedSport(e.target.value);
@@ -168,38 +217,29 @@ const Admin = () => {
         )}
 
         {activeTab === "requests" && (
-          <div>
-            <h3>Approve Admin Requests</h3>
-            <div className="admin-box">
-              {requests.length === 0 ? (
-                <p>No pending requests</p>
-              ) : (
-                requests.map((req) => (
-                  <div key={req.id} className="request-item">
-                    <span>
-                      {req.name} ({req.email})
-                    </span>
-                    <div>
-                      <button
-                        className="approve"
-                        onClick={() => handleApprove(req.id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="decline"
-                        onClick={() => handleDecline(req.id)}
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+  <div className="admin-requests">
+    <h2>Admin Requests</h2>
+    {requests.length === 0 ? (
+      <p>No pending requests</p>
+    ) : (
+      requests.map((req) => (
+        <div key={req._id} className="request-item">
+          <p><strong>Name:</strong> {req.name}</p>
+          <p><strong>Reason:</strong> {req.reason}</p>
+          <div className="button-group">
+            <button className="approve" onClick={() => handleApprove(req._id)}>
+              Approve
+            </button>
+            <button className="decline" onClick={() => handleDecline(req._id)}>
+              Decline
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      ))
+    )}
+  </div>
+)}
+</div>
     </div>
   );
 };

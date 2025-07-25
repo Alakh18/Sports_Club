@@ -74,16 +74,37 @@ function Profile() {
   };
 
   // NEW: Handle Admin Request
-  const handleAdminRequest = () => {
+  const handleAdminRequest = async () => {
+  const reason = prompt("Why do you want to become an admin?");
+  if (!reason) return;
+
+  try {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch("/api/request-admin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ reason }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      alert(error.error || "Failed to send admin request.");
+      return;
+    }
+
     setAdminRequestSent(true);
-    setToastMessage(
-      "🛡️ Admin request sent successfully. Please wait for approval."
-    );
+    setToastMessage("🛡️ Admin request sent successfully. Please wait for approval.");
     setToastVisible(true);
-    setTimeout(() => {
-      setToastVisible(false);
-    }, 3000);
-  };
+    setTimeout(() => setToastVisible(false), 3000);
+  } catch (err) {
+    console.error("Error sending admin request:", err);
+    alert("Something went wrong.");
+  }
+};
+
 
   return (
     <>

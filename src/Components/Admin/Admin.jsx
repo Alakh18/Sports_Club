@@ -24,7 +24,8 @@ const Admin = () => {
       if (!res.ok) throw new Error("Failed to fetch requests");
 
       const data = await res.json();
-      setRequests(data);
+      const pendingRequests = data.filter((request) => request.status === "pending");
+      setRequests(pendingRequests);
     } catch (err) {
       console.error("Failed to fetch requests:", err);
     }
@@ -36,15 +37,14 @@ const Admin = () => {
 
 
 
-
-  const handleApprove = async (id) => {
+const handleApprove = async (id) => {
   try {
-    await fetch(`http://localhost:5000/api/admin/requests/${id}`, {
+    await fetch(`http://localhost:5000/api/admin/requests/approve/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
-      body: JSON.stringify({ status: "approved" }),
     });
     setRequests((prev) => prev.filter((r) => r._id !== id));
     alert("Approved!");
@@ -55,12 +55,12 @@ const Admin = () => {
 
 const handleDecline = async (id) => {
   try {
-    await fetch(`http://localhost:5000/api/admin/requests/${id}`, {
+    await fetch(`http://localhost:5000/api/admin/requests/reject/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
-      body: JSON.stringify({ status: "rejected" }),
     });
     setRequests((prev) => prev.filter((r) => r._id !== id));
     alert("Declined.");

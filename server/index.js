@@ -7,9 +7,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const User = require("./models/User.js");
-const AdminRequest = require("./models/adminrequest.js");
-const sportRoutes = require('./routes/sportRoutes');
+
+
 
 const app = express();
 const User = require("./models/User.js");
@@ -17,8 +16,7 @@ const AdminRequest = require("./models/adminRequest.js");
 const Event = require("./models/sports.js");
 const sportRoutes = require("./Routes/SportsRoutes.js");
 app.use("/api/sports", sportRoutes);
-const noticeRoutes =require("./Routes/noticeRoutes.js");
-app.use("/api/notices", noticeRoutes);
+
 app.use("/uploads", express.static("uploads"));
 
 const port = process.env.PORT || 5000;
@@ -241,14 +239,15 @@ app.put("/api/admin/requests/approve/:id", authenticate, isAdmin, async (req, re
     }
 });
 
-app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res) => {
+app.put("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res) => {
     try {
         const request = await AdminRequest.findById(req.params.id);
         if (!request) return res.status(404).json({ error: "Admin request not found" });
 
-        await request.deleteOne();
+        request.status = "rejected";
+        await request.save();
 
-        res.json({ message: "Request rejected and deleted successfully" });
+        res.json({ message: "Request rejected successfully." });
     } catch (err) {
         console.error("Error rejecting admin request:", err);
         res.status(500).json({ error: "Failed to reject request" });

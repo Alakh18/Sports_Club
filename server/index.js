@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const app = express();
 const User = require("./models/User.js");
-const AdminRequest = require("./models/adminrequest.js"); 
+const AdminRequest = require("./models/adminRequest.js"); 
 const Event = require("./models/sports.js");
 const sportRoutes = require("./Routes/SportsRoutes.js");
 app.use("/api/sports", sportRoutes);

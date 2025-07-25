@@ -111,16 +111,18 @@ function Header() {
             >
               FAQ
             </Link>
-            <Link
-              to="/admin"
-              className="header__nav-link"
-              onClick={() => {
-                closeMenu();
-                scrollToTop();
-              }}
-            >
-              Admin
-            </Link>
+            {user?.role === "admin" && (
+              <Link
+                to="/admin"
+                className="header__nav-link"
+                onClick={() => {
+                  closeMenu();
+                  scrollToTop();
+                }}
+              >
+                Admin
+              </Link>
+            )}
 
             {!user ? (
               <>

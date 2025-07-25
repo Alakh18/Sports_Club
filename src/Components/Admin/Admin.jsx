@@ -4,7 +4,6 @@ import "react-calendar/dist/Calendar.css";
 import { FaBars } from "react-icons/fa";
 import "./Admin.css";
 
-
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("manage");
   const [collapsed, setCollapsed] = useState(false);
@@ -12,9 +11,6 @@ const Admin = () => {
   const [eventDate, setEventDate] = useState(new Date());
   const [requests, setRequests] = useState([]);
   
-
-
-
   useEffect(() => {
   const fetchRequests = async () => {
     try {

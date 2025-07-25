@@ -182,3 +182,6 @@ app.put("/api/users/profile", authenticate, async (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });
+app.get("/api/message", (req, res) => {
+  res.json({ message: "Hello from the backend!" });
+});

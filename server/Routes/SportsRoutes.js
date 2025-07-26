@@ -89,6 +89,24 @@ router.delete("/:sportId/gallery/:imageId", async (req, res) => {
   }
 });
 
+router.put("/:sportId/events/:eventId", async (req, res) => {
+  try {
+    const { sportId, eventId } = req.params;
+    const updatedData = req.body;
+
+    const sport = await Sport.findOneAndUpdate(
+      { _id: sportId, "events._id": eventId },
+      { $set: { "events.$": updatedData } },
+      { new: true }
+    );
+
+    if (!sport) return res.status(404).json({ message: "Event not found" });
+    res.status(200).json(sport);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // --- 🗓️ EVENT ROUTES ---
 

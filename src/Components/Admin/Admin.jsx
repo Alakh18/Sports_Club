@@ -17,6 +17,9 @@ const [eventTime, setEventTime] = useState("");
 const [eventLocation, setEventLocation] = useState("");
 const [eligibility, setEligibility] = useState("");
 const [description, setDescription] = useState("");
+const [events, setEvents] = useState([]);
+const [editingEvent, setEditingEvent] = useState(null);
+
 
   // Admin.jsx - inside handleSaveEvent
 const handleSaveEvent = async () => {
@@ -124,7 +127,7 @@ useEffect(() => {
 }, []);
 
 
-
+const selectedSportName = sports.find(s => s._id === selectedSport)?.name || "";
 
 const handleApprove = async (id) => {
   try {
@@ -158,9 +161,78 @@ const handleDecline = async (id) => {
   }
 };
 
-  const handleSportChange = (e) => {
-    setSelectedSport(e.target.value);
-  };
+  const handleSportChange = async (e) => {
+  const sportId = e.target.value;
+  setSelectedSport(sportId);
+  setEditingEvent(null); // reset editing mode
+
+  if (!sportId) {
+    setEvents([]);
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/sports/${sportId}/events`);
+    const data = await res.json();
+    setEvents(data.events || []);
+  } catch (err) {
+    console.error("Failed to fetch events", err);
+  }
+};
+
+//delete events
+const handleDeleteEvent = async (eventId) => {
+  if (!window.confirm("Are you sure you want to delete this event?")) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/sports/${selectedSport}/events/${eventId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authtoken: localStorage.getItem("authToken"),
+      },
+    });
+
+    if (!res.ok) throw new Error("Failed to delete event");
+    setEvents((prev) => prev.filter((e) => e._id !== eventId));
+    alert("Event deleted successfully!");
+  } catch (err) {
+    console.error("Error deleting event:", err);
+    alert("Failed to delete event");
+  }
+};
+
+const startEdit = (event) => {
+  setEditingEvent({ ...event }); // make a copy so we can edit fields
+};
+
+const cancelEdit = () => {
+  setEditingEvent(null);
+};
+
+const handleSaveEdit = async () => {
+  try {
+    const res = await fetch(`http://localhost:5000/api/sports/${selectedSport}/events/${editingEvent._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authtoken: localStorage.getItem("authToken"),
+      },
+      body: JSON.stringify(editingEvent),
+    });
+
+    if (!res.ok) throw new Error("Failed to update event");
+
+    const updatedSport = await res.json();
+    setEvents(updatedSport.events);
+    setEditingEvent(null);
+    alert("Event updated successfully!");
+  } catch (err) {
+    console.error("Error updating event:", err);
+    alert("Failed to update event");
+  }
+};
+
 
   const formatDate = (date) =>
     date.toLocaleDateString("en-IN", {
@@ -182,13 +254,11 @@ const handleDecline = async (id) => {
           </button>
         </div>
         <ul className="admin-tabs">
-          <li
-            className={activeTab === "manage" ? "active" : ""}
-            onClick={() => setActiveTab("manage")}
-          >
-            <span className="icon">📋</span>
-            {!collapsed && <span className="label">Manage Events</span>}
-          </li>
+                <li className={activeTab === "manage" ? "active" : ""} onClick={() => setActiveTab("manage")}>
+          <span className="icon">📋</span>
+          {!collapsed && <span className="label">Manage Events</span>}
+        </li>
+
           <li
             className={activeTab === "add" ? "active" : ""}
             onClick={() => setActiveTab("add")}
@@ -226,31 +296,43 @@ const handleDecline = async (id) => {
 </select>
 
               {selectedSport && (
-                <div style={{ marginTop: "20px" }}>
-                  <strong>Events for {selectedSport}:</strong>
-                  <ul style={{ marginTop: "10px" }}>
-                    <li>
-                      Match 1 – 25 July 2025
-                      <button
-                        className="admin-btn"
-                        style={{ marginLeft: "10px" }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="admin-btn"
-                        style={{
-                          backgroundColor: "#f5b3b3",
-                          marginLeft: "8px",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </li>
-                    {/* Add more mock events or load dynamically */}
-                  </ul>
-                </div>
-              )}
+  <div style={{ marginTop: "20px" }}>
+    <strong>Events for {selectedSportName}:</strong>
+    <ul style={{ marginTop: "10px" }}>
+      {events.map((ev) => (
+        <li key={ev._id}>
+          {editingEvent && editingEvent._id === ev._id ? (
+            <>
+              <input
+                type="text"
+                value={editingEvent.name}
+                onChange={(e) =>
+                  setEditingEvent({ ...editingEvent, name: e.target.value })
+                }
+              />
+              <input
+                type="date"
+                value={editingEvent.date?.split("T")[0] || ""}
+                onChange={(e) =>
+                  setEditingEvent({ ...editingEvent, date: e.target.value })
+                }
+              />
+              <button className="admin-btn" onClick={handleSaveEdit}>Save</button>
+              <button className="admin-btn" style={{ backgroundColor: "#ccc", marginLeft: "8px" }} onClick={cancelEdit}>Cancel</button>
+            </>
+          ) : (
+            <>
+              <strong>{ev.name}</strong> – {formatDate(new Date(ev.date))}
+              <button className="admin-btn" style={{ marginLeft: "10px" }} onClick={() => startEdit(ev)}>Edit</button>
+              <button className="admin-btn" style={{ backgroundColor: "#f5b3b3", marginLeft: "8px" }} onClick={() => handleDeleteEvent(ev._id)}>Delete</button>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
             </div>
           </div>
         )}

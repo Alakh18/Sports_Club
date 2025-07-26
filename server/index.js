@@ -44,19 +44,7 @@ function generateJWT(payload) {
 }
 
 // Middleware to protect routes (Authentication)
-function authenticate(req, res, next) {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized: No token provided" });
-
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        req.userId = decoded.id;
-        next();
-    } catch (err) {
-        console.error("JWT verification error:", err);
-        return res.status(401).json({ error: "Unauthorized: Invalid token" });
-    }
-}
+const authenticate = require("./authenticate");
 
 // Admin check middleware (Authorization)
 function isAdmin(req, res, next) {
@@ -251,6 +239,12 @@ app.put("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res
 app.get("/api/message", (_ , res) => {
     res.json({ message: "Hello from the backend!" });
 });
+
+const trackRoutes = require('./routes/trackroute');
+app.use('/api', trackRoutes);
+
+// ✅ Export middleware for external use (like in trackroute.js)
+module.exports = { authenticate };
 
 // Start Server
 app.listen(port, () => {

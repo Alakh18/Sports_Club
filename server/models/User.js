@@ -14,6 +14,13 @@ const userSchema = new mongoose.Schema({
   profileImage: { type: String }, // Will store URL if using Cloudinary
   achievements: { type: String },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  trackedEvents: [
+  {
+    eventName: String,
+    date: String,
+    sport: String
+  }
+],
   createdAt: { type: Date, default: Date.now }
 });
 

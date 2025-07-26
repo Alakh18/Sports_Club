@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js");
-const sportRoutes = require('./routes/sportRoutes');
+const sportRoutes = require("./Routes/SportsRoutes.js");
 
 const app = express();
 app.use(express.json());
@@ -20,8 +20,6 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization","authToken"]
 }));
 
-const User = require("./models/User.js");
-const sportRoutes = require("./Routes/SportsRoutes.js");
 app.use("/api/sports", sportRoutes);
 
 app.use("/uploads", express.static("uploads"));

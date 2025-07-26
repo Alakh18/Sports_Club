@@ -23,16 +23,13 @@ export default function Sports() {
         const matchedSport = data.find(
           (sport) => sport.name.toLowerCase() === sportName.toLowerCase()
         );
-        if (matchedSport && matchedSport._id) {
-          fetch(`http://localhost:5000/api/sports/${matchedSport._id}/gallery`)
-            .then((res) => res.json())
-            .then((galleryData) => setGallery(galleryData))
-            .catch((err) => console.error("Gallery fetch failed:", err));
-
-          fetch(`http://localhost:5000/api/sports/${matchedSport._id}/events`)
-            .then((res) => res.json())
-            .then((eventData) => setEvents(eventData))
-            .catch((err) => console.error("Events fetch failed:", err));
+        if (matchedSport) {
+          setEvents(
+            Array.isArray(matchedSport.events) ? matchedSport.events : []
+          );
+          setGallery(
+            Array.isArray(matchedSport.gallery) ? matchedSport.gallery : []
+          );
         }
       })
       .catch((err) => console.error("Error fetching sports:", err));
@@ -131,7 +128,10 @@ export default function Sports() {
             )}
 
             {showImageModal && selectedImage && (
-              <div className="image-modal" onClick={() => setShowImageModal(false)}>
+              <div
+                className="image-modal"
+                onClick={() => setShowImageModal(false)}
+              >
                 <img src={selectedImage.image} alt="modal" />
               </div>
             )}
@@ -150,7 +150,9 @@ export default function Sports() {
                     key={event._id}
                     className="registration-card"
                     onClick={() =>
-                      isLoggedIn ? handleRegisterClick(event._id) : alert("Please login to register.")
+                      isLoggedIn
+                        ? handleRegisterClick(event._id)
+                        : alert("Please login to register.")
                     }
                   >
                     {event.eventName}

@@ -302,31 +302,67 @@ const handleSaveEdit = async () => {
       {events.map((ev) => (
         <li key={ev._id}>
           {editingEvent && editingEvent._id === ev._id ? (
-            <>
-              <input
-                type="text"
-                value={editingEvent.name}
-                onChange={(e) =>
-                  setEditingEvent({ ...editingEvent, name: e.target.value })
-                }
-              />
-              <input
-                type="date"
-                value={editingEvent.date?.split("T")[0] || ""}
-                onChange={(e) =>
-                  setEditingEvent({ ...editingEvent, date: e.target.value })
-                }
-              />
-              <button className="admin-btn" onClick={handleSaveEdit}>Save</button>
-              <button className="admin-btn" style={{ backgroundColor: "#ccc", marginLeft: "8px" }} onClick={cancelEdit}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <strong>{ev.name}</strong> – {formatDate(new Date(ev.date))}
-              <button className="admin-btn" style={{ marginLeft: "10px" }} onClick={() => startEdit(ev)}>Edit</button>
-              <button className="admin-btn" style={{ backgroundColor: "#f5b3b3", marginLeft: "8px" }} onClick={() => handleDeleteEvent(ev._id)}>Delete</button>
-            </>
-          )}
+  <>Event Name:
+    <input
+      type="text"
+      value={editingEvent.name}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, name: e.target.value })
+      }
+    />
+    Date:
+    <input
+      type="date"
+      value={editingEvent.date?.split("T")[0] || ""}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, date: e.target.value })
+      }
+    />
+    Time:
+    <input
+      type="time"
+      value={editingEvent.time || ""}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, time: e.target.value })
+      }
+    />
+    Location:
+    <input
+      type="text"
+      placeholder="Location"
+      value={editingEvent.location || ""}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, location: e.target.value })
+      }
+    />
+    Eligibility:
+    <textarea
+      placeholder="Eligibility"
+      value={editingEvent.eligibility || ""}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, eligibility: e.target.value })
+      }
+    />
+    Description:
+    <textarea
+      placeholder="Description"
+      value={editingEvent.description || ""}
+      onChange={(e) =>
+        setEditingEvent({ ...editingEvent, description: e.target.value })
+      }
+    />
+
+    <button className="admin-btn" onClick={handleSaveEdit}>Save</button>
+    <button className="admin-btn" style={{ backgroundColor: "#ccc", marginLeft: "8px" }} onClick={cancelEdit}>Cancel</button>
+  </>
+) : (
+  <>
+    <strong>{ev.name}</strong> – {formatDate(new Date(ev.date))}
+    <button className="admin-btn" style={{ marginLeft: "10px" }} onClick={() => startEdit(ev)}>Edit</button>
+    <button className="admin-btn" style={{ backgroundColor: "#f5b3b3", marginLeft: "8px" }} onClick={() => handleDeleteEvent(ev._id)}>Delete</button>
+  </>
+)}
+
         </li>
       ))}
     </ul>

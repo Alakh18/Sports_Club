@@ -6,6 +6,7 @@ const eventSchema = new mongoose.Schema({
   time: String,
   location: String,
   eligibility: String,
+  description: String,
   trackedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }]
 });
 

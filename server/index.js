@@ -6,11 +6,19 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-
-
-
 const app = express();
+app.use(express.json());
+app.use(cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization","authToken"]
+}));
+
+
+
+
+
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminRequest.js"); 
 const Event = require("./models/sports.js");
@@ -20,14 +28,10 @@ app.use("/api/sports", sportRoutes);
 app.use("/uploads", express.static("uploads"));
 
 const port = process.env.PORT || 5000;
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 // Middleware
-app.use(cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
 
 // JSON body parser with 10MB limit
 app.use(express.json({ limit: '10mb' }));

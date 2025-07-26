@@ -1,6 +1,40 @@
 const express = require("express");
 const router = express.Router();
 const Sport = require("../models/sports");
+// SportsRoutes.js - ADD event to sport
+router.post("/:id/events", async (req, res) => { // Re-add authenticate, isAdmin if needed
+  try {
+    const sportId = req.params.id;
+    const eventData = req.body;
+
+    // --- CRITICAL DEBUGGING LINES ---
+    console.log("Backend received raw req.body:", req.body);
+    console.log("Backend received eventData:", eventData);
+    console.log("Type of eventData.date:", typeof eventData.date);
+    console.log("Is eventData.name defined?", !!eventData.name);
+    console.log("Is eventData.date defined?", !!eventData.date);
+    // ---------------------------------
+
+    const sport = await Sport.findById(sportId);
+
+    if (!sport) {
+      return res.status(404).json({ message: "Sport not found" });
+    }
+
+    // THIS IS THE CORRECT WAY TO PUSH A SUBDOCUMENT FOR MOONGOSE TO CAST PROPERLY
+    sport.events.push(eventData);
+    await sport.save();
+
+    res.status(201).json({ message: "Event added successfully", event: sport.events[sport.events.length - 1] });
+  } catch (err) {
+    console.error("Error adding event to sport:", err);
+    // Log detailed Mongoose validation errors
+    if (err.name === 'ValidationError') {
+        return res.status(400).json({ error: err.message, details: err.errors });
+    }
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 router.get("/", async (req, res) => {
@@ -22,7 +56,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 // --- 📸 GALLERY ROUTES ---
 
@@ -55,23 +88,28 @@ router.delete("/:sportId/gallery/:imageId", async (req, res) => {
   }
 });
 
+router.put("/:sportId/events/:eventId", async (req, res) => {
+  try {
+    const { sportId, eventId } = req.params;
+    const updatedData = req.body;
+
+    const sport = await Sport.findOneAndUpdate(
+      { _id: sportId, "events._id": eventId },
+      { $set: { "events.$": updatedData } },
+      { new: true }
+    );
+
+    if (!sport) return res.status(404).json({ message: "Event not found" });
+    res.status(200).json(sport);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // --- 🗓️ EVENT ROUTES ---
 
 // ADD event to sport
-router.post("/:id/events", async (req, res) => {
-  try {
-    const event = req.body; // must include name, date, time, location, etc.
-    const sport = await Sport.findByIdAndUpdate(
-      req.params.id,
-      { $push: { events: event } },
-      { new: true }
-    );
-    res.status(200).json(sport);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
 
 // DELETE event from sport by event ID
 router.delete("/:sportId/events/:eventId", async (req, res) => {

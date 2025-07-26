@@ -12,15 +12,25 @@ const AdminRequest = require("./models/adminrequest.js");
 const sportRoutes = require('./routes/sportRoutes');
 
 const app = express();
-const port = process.env.PORT || 5000;
-
-// Middleware
+app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization","authToken"]
 }));
+
+const User = require("./models/User.js");
+const sportRoutes = require("./Routes/SportsRoutes.js");
+app.use("/api/sports", sportRoutes);
+
+app.use("/uploads", express.static("uploads"));
+
+const port = process.env.PORT || 5000;
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+// Middleware
 
 // JSON body parser with 10MB limit
 app.use(express.json({ limit: '10mb' }));

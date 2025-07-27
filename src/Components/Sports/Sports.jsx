@@ -13,8 +13,10 @@ export default function Sports() {
   const [gallery, setGallery] = useState([]);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [registeredEventName, setRegisteredEventName] = useState("");
 
-  const isLoggedIn = !!localStorage.getItem("token");
+  const isLoggedIn = !!localStorage.getItem("authToken");
 
   useEffect(() => {
     fetch("http://localhost:5000/api/sports")
@@ -40,13 +42,57 @@ export default function Sports() {
     setShowImageModal(true);
   };
 
-  const handleRegisterClick = (eventId) => {
+  const handleRegisterClick = (event) => {
     if (!isLoggedIn) {
       alert("Please login to register.");
     } else {
-      alert(`Registered for event: ${eventId}`);
+      // --- This is the updated part ---
+      setRegisteredEventName(event.eventName);
+      setShowSuccessPopup(true);
+
+      // Hide the popup after 3 seconds
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+      }, 3000);
+
+      // You can still perform your registration logic here, e.g., an API call
     }
   };
+
+  function formatTime(time24) {
+    if (!time24) return "";
+    const [hourStr, minute] = time24.split(":");
+    let hour = parseInt(hourStr, 10);
+    const suffix = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12; // Convert to 12-hour format
+    return `${hour}:${minute} ${suffix}`;
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+
+    // Get suffix (st, nd, rd, th)
+    const getSuffix = (d) => {
+      if (d > 3 && d < 21) return "th";
+      switch (d % 10) {
+        case 1:
+          return "st";
+        case 2:
+          return "nd";
+        case 3:
+          return "rd";
+        default:
+          return "th";
+      }
+    };
+
+    const suffix = getSuffix(day);
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+
+    return `${day}${suffix} ${month} ${year}`;
+  }
 
   return (
     <div className="sport-detail-wrapper">
@@ -95,9 +141,10 @@ export default function Sports() {
                     <h4>{event.eventName}</h4>
                     {expandedEvent === event._id && (
                       <div className="events-details">
-                        <p>Date: {event.date}</p>
-                        <p>Time: {event.time}</p>
+                        <p>Date: {formatDate(event.date)}</p>
+                        <p>Time: {formatTime(event.time)}</p>
                         <p>Location: {event.location}</p>
+                        <p>Description: {event.description}</p>
                       </div>
                     )}
                   </div>
@@ -151,7 +198,7 @@ export default function Sports() {
                     className="registration-card"
                     onClick={() =>
                       isLoggedIn
-                        ? handleRegisterClick(event._id)
+                        ? handleRegisterClick(event)
                         : alert("Please login to register.")
                     }
                   >
@@ -180,6 +227,17 @@ export default function Sports() {
             )}
           </div>
         )}
+
+        {showSuccessPopup && (
+          <div className="success-popup">
+            <p>
+              ✅ Successfully registered for:{" "}
+              <strong>{registeredEventName}</strong>
+            </p>
+            <button onClick={() => setShowSuccessPopup(false)}>&times;</button>
+          </div>
+        )}
+
       </main>
     </div>
   );

@@ -4,6 +4,7 @@
   background-color: var(--primary); /* Dark base */
   color: #2c2c2c;
   font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -51,6 +52,8 @@
   flex: 1;
   padding: 40px;
   background-color: #fefae0;
+  min-width: 0;
+  overflow-x: auto;
 }
 
 .admin-content h3 {
@@ -65,6 +68,8 @@
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(180, 170, 0, 0.1);
   margin-bottom: 30px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-box label {
@@ -77,6 +82,7 @@
 .admin-box input,
 .admin-box select,
 .admin-box textarea {
+  box-sizing: border-box;
   width: 100%;
   padding: 10px 14px;
   margin-top: 6px;
@@ -236,70 +242,69 @@ button.decline {
   .admin-sidebar.collapsed {
     width: 100%;
     flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .admin-tabs {
-    display: flex;
-    gap: 12px;
-  }
-
-  .admin-content {
-    padding: 24px;
-  }
-}
-
-/* Fix sidebar behavior in mobile */
-@media (max-width: 1024px) {
-  .admin-wrapper {
-    flex-direction: column;
-  }
-
-  .admin-sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
+    flex-wrap: wrap;
     padding: 16px;
     border-right: none;
     border-bottom: 1px solid #f3e7c5;
+    overflow: visible; /* Allow content to wrap */
   }
 
-  .admin-sidebar.collapsed {
-    width: 100%;
+  .sidebar-header,
+  .admin-sidebar h2 {
+    display: none;
   }
 
   .admin-tabs {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    flex-wrap: wrap;
+    width: 90%;
   }
 
   .admin-tabs li {
-    flex: 1 1 auto;
-    padding: 10px;
-    font-size: 0.95rem;
     justify-content: center;
-  }
-
-  .admin-tabs li .icon {
-    font-size: 16px;
+    width: 90%;
+    max-width: 350px;
   }
 
   .admin-tabs li .label {
-    font-size: 0.95rem;
+    display: inline-block !important; /* Ensure labels are always visible */
   }
 
-  .sidebar-header {
-    display: none;
+  .admin-content {
+    padding: 30px;
+  }
+
+  .request-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .admin-btn {
+    width: auto;
+    padding: 12px 20px;
+  }
+
+  .custom-calendar .react-calendar__navigation__label {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .custom-calendar .react-calendar__navigation__arrow {
+    font-size: 1.25rem;
+    min-width: 34px;
   }
 }
 
-/* Tablet Size Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .admin-content {
-    padding: 20px;
+    padding: 24px 16px;
+  }
+
+  .admin-content h3 {
+    font-size: 1.5rem;
   }
 
   .admin-box {
@@ -313,68 +318,26 @@ button.decline {
   .admin-box input,
   .admin-box select,
   .admin-box textarea {
+    font-size: 0.95rem;
     padding: 10px 12px;
-    font-size: 0.95rem;
   }
 
   .admin-btn {
-    font-size: 0.95rem;
-    padding: 10px 16px;
-  }
-
-  .request-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .request-item button {
-    font-size: 0.9rem;
-  }
-}
-
-/* Small screen and phone adjustments */
-@media (max-width: 480px) {
-  .admin-content h3 {
-    font-size: 1.3rem;
-  }
-
-  .admin-box label {
-    font-size: 0.9rem;
-  }
-
-  .admin-box input,
-  .admin-box select,
-  .admin-box textarea {
-    font-size: 0.9rem;
-    padding: 8px 10px;
-  }
-
-  .admin-btn {
-    width: 100%;
-    font-size: 0.95rem;
-    padding: 10px;
-  }
-
-  .collapse-btn {
-    font-size: 18px;
-  }
-
-  .styled-select {
-    font-size: 0.95rem;
-    padding: 10px;
-  }
-
-  .custom-calendar {
-    padding: 8px;
+    width: 100%; /* Make button full-width */
+    font-size: 1rem;
+    padding: 12px;
   }
 
   .admin-tabs li {
-    padding: 8px 10px;
-    font-size: 0.85rem;
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
 
   .admin-tabs li .icon {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  .request-item button {
+    padding: 8px 14px;
   }
 }

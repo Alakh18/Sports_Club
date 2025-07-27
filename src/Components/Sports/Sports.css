@@ -1,9 +1,21 @@
+:root {
+  --primary-bg: #fefae0;
+  --sidebar-bg: #fffbe7;
+  --accent: #f9e68c;
+  --accent-hover: #f1eac7;
+  --text-dark: #3e3600;
+  --text-light: #4b4400;
+  --border: #e5deb3;
+  --card-bg: #fffdf0;
+  --hover-bg: #f9f5d7;
+  --shadow: rgba(0, 0, 0, 0.06);
+  --shadow-hover: rgba(0, 0, 0, 0.12);
+}
+
 .sport-detail-wrapper {
   display: flex;
   min-height: 100vh;
-  background-color: #fefae0;
-  font-family: "Poppins", sans-serif;
-  color: #333;
+  background-color: var(--primary-bg);
   position: relative;
 }
 
@@ -17,10 +29,10 @@
 /* Sidebar */
 .sport-sidebar {
   width: 240px;
-  background-color: #fffbe7;
+  background-color: var(--sidebar-bg);
   padding: 30px 20px;
-  border-right: 1px solid #e5deb3;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid var(--border);
+  box-shadow: 2px 0 12px var(--shadow);
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -33,9 +45,7 @@
   box-shadow: none;
 }
 
-.sidebar-container.collapsed .sport-sidebar *,
-.sidebar-container.collapsed .sport-sidebar-title,
-.sidebar-container.collapsed .sport-section-tabs {
+.sidebar-container.collapsed .sport-sidebar * {
   display: none;
 }
 
@@ -45,15 +55,16 @@
   top: 20px;
   left: 240px;
   z-index: 10;
-  background-color: #f9e68c;
+  background-color: var(--accent);
   border: none;
-  padding: 8px 10px;
+  padding: 8px 12px;
   font-size: 1rem;
   font-weight: bold;
-  color: #3e3600;
+  color: var(--text-dark);
   cursor: pointer;
-  border-radius: 5px;
-  transition: left 0.3s ease;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px var(--shadow);
+  transition: all 0.3s ease;
 }
 
 .sidebar-container.collapsed .sidebar-toggle-btn {
@@ -63,9 +74,9 @@
 /* Sidebar Title */
 .sport-sidebar-title {
   margin-bottom: 30px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #5c5100;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-dark);
 }
 
 /* Section Tabs */
@@ -76,45 +87,46 @@
 }
 
 .sport-section-tabs li {
-  padding: 10px 16px;
+  padding: 12px 16px;
   border-radius: 8px;
   margin-bottom: 12px;
   cursor: pointer;
   font-weight: 500;
-  color: #4d4200;
+  color: var(--text-dark);
   background-color: transparent;
   transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
 .sport-section-tabs li:hover {
-  background-color: #f1eac7;
-  color: #2c2500;
+  background-color: var(--accent-hover);
+  border: 1px solid var(--accent);
 }
 
 .sport-section-tabs li.active {
-  background-color: #f9e68c;
+  background-color: var(--accent);
   font-weight: 600;
-  color: #2b2300;
+  color: var(--text-dark);
+  box-shadow: 0 2px 8px var(--shadow);
 }
 
 /* Main content */
 .sport-section-content {
   flex-grow: 1;
   padding: 50px 40px;
-  background-color: #fefae0;
-  transition: margin-left 0.3s ease;
+  background-color: var(--primary-bg);
 }
 
 .sport-section-content h3 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: #3e3600;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: var(--text-dark);
 }
 
 .sport-section-content p {
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #4b4400;
+  color: var(--text-dark);
 }
 
 /* === EVENTS SECTION === */
@@ -125,30 +137,32 @@
 }
 
 .events-card {
-  background-color: #fffdf0;
-  border: 1px solid #e5deb3;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 18px 20px;
+  box-shadow: 0 2px 10px var(--shadow);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .events-card:hover {
+  background-color: var(--hover-bg);
   transform: scale(1.01);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px var(--shadow-hover);
 }
 
 .events-card h4 {
   margin: 0;
-  color: #3e3600;
+  font-size: 1.2rem;
+  color: var(--text-dark);
 }
 
 .events-details {
-  margin-top: 10px;
-  color: #4b4400;
+  margin-top: 12px;
+  color: var(--text-dark);
+  font-size: 1rem;
 }
-
 
 /* === GALLERY SECTION === */
 .gallery-list {
@@ -158,10 +172,10 @@
 }
 
 .gallery-card {
-  background-color: #fffdf0;
+  background-color: var(--card-bg);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px var(--shadow);
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -177,8 +191,10 @@
 }
 
 .gallery-description {
-  padding: 12px;
-  color: #3e3600;
+  padding: 12px 16px;
+  color: var(--text-dark);
+  background-color: #fffaf0;
+  font-weight: 500;
 }
 
 /* === MODAL === */
@@ -186,13 +202,13 @@
   position: fixed;
   top: 0;
   left: 0;
+  background: rgba(0, 0, 0, 0.85);
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: zoom-out;
 }
 
@@ -200,31 +216,82 @@
   max-width: 90%;
   max-height: 90%;
   border-radius: 12px;
+  box-shadow: 0 0 24px #000;
 }
-
 
 /* === REGISTRATION === */
 .registration-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .registration-card {
-  background-color: #fffdf0;
-  padding: 14px 20px;
+  background-color: var(--card-bg);
+  padding: 16px 20px;
   border-radius: 10px;
-  border: 1px solid #e5deb3;
-  color: #3e3600;
+  border: 1px solid var(--border);
+  color: var(--text-dark);
   font-weight: bold;
+  text-align: center;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .registration-card:hover {
-  background-color: #f9f5d7;
+  background-color: var(--hover-bg);
+  transform: scale(1.01);
 }
 
+/* === SUCCESS POPUP === */
+.success-popup {
+  position: fixed;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--accent); /* Dark, using your palette */
+  color: #fefae0; /* Light text */
+  padding: 16px 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  animation: slideInDown 0.4s ease-out;
+}
+
+.success-popup p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.success-popup button {
+  background: none;
+  border: none;
+  color: #fefae0;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.7;
+  padding: 0;
+}
+
+.success-popup button:hover {
+  opacity: 1;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -30px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
 
 /* === ELIGIBILITY === */
 .eligibility-list {
@@ -234,20 +301,29 @@
 }
 
 .eligibility-card {
-  background-color: #fffdf0;
-  padding: 16px;
+  background-color: var(--card-bg);
+  color: var(--text-dark);
+  padding: 18px 20px;
+  border-left: 4px solid var(--accent);
   border-radius: 10px;
-  border-left: 4px solid #e5deb3;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px var(--shadow);
 }
 
 .eligibility-card h4 {
-  color: #3e3600;
+  color: var(--text-dark);
   margin-bottom: 8px;
 }
 
 .eligibility-card p {
-  color: #4b4400;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+.eligibility-card:hover {
+  background-color: var(--hover-bg);
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Mobile layout */
@@ -256,38 +332,22 @@
     flex-direction: column;
   }
 
-  .sidebar-container {
-    width: 100%;
-  }
-
   .sport-sidebar {
     width: 100%;
     padding: 20px;
     border-right: none;
-    border-bottom: 1px solid #e5deb3;
-    display: block;
-    box-shadow: none;
-  }
-
-  .sport-section-tabs {
-    display: block;
-  }
-
-  .sport-section-tabs li {
-    margin-bottom: 10px;
-    padding: 12px 14px;
-    font-size: 1rem;
+    border-bottom: 1px solid var(--border);
   }
 
   .sidebar-toggle-btn {
-    display: block;
     top: 10px;
+    left: 10px;
     transform: scale(0.9);
     z-index: 20;
   }
 
   .sport-section-content {
-    padding: 20px 16px;
+    padding: 24px 16px;
   }
 }
 
@@ -297,7 +357,7 @@
   }
 
   .sport-section-content h3 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   .sport-section-content p {

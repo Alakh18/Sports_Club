@@ -1,33 +1,85 @@
 .hero.bright-hero {
   background: #fefae0;
-  padding: 40px 20px;
-  min-height: 40vh;
+  padding: 60px 20px;
+  min-height: 50vh;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.hero.bright-hero *,
+.hero__content * {
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
 }
 
 .hero__content {
   max-width: 700px;
+  width: 100%;
   margin: auto;
+  padding: 0 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .hero__title {
-  font-size: 2.4rem;
+  font-size: 2.8rem;
   color: var(--primary);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
 .hero__subtitle {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #444;
+  line-height: 1.6;
+  font-weight: 400;
 }
 
+/* Tablets */
 @media (max-width: 768px) {
+  .hero__title {
+    font-size: 2.2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.05rem;
+  }
+}
+
+/* Phones */
+@media (max-width: 576px) {
+  .hero.bright-hero {
+    padding: 40px 15px;
+    min-height: 45vh;
+  }
+
   .hero__title {
     font-size: 1.8rem;
   }
+
   .hero__subtitle {
     font-size: 0.95rem;
+  }
+}
+
+/* Very small phones (320px–375px) */
+@media (max-width: 400px) {
+  .hero__title {
+    font-size: 1.6rem;
+  }
+
+  .hero__subtitle {
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 }

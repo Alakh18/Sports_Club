@@ -11,7 +11,7 @@ router.post("/:id/events", async (req, res) => { // Re-add authenticate, isAdmin
     console.log("Backend received raw req.body:", req.body);
     console.log("Backend received eventData:", eventData);
     console.log("Type of eventData.date:", typeof eventData.date);
-    console.log("Is eventData.name defined?", !!eventData.name);
+    console.log("Is eventData.eventName defined?", !!eventData.eventName);
     console.log("Is eventData.date defined?", !!eventData.date);
     // ---------------------------------
 

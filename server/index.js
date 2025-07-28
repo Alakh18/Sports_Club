@@ -9,25 +9,32 @@ const jwt = require('jsonwebtoken');
 
 const User = require("./models/User.js");
 const AdminRequest = require("./models/adminrequest.js");
-const Event = require("./models/Event.js");
-const sportRoutes = require('./routes/sportRoutes');
+const sportRoutes = require("./Routes/SportsRoutes.js");
 
 const app = express();
-const port = process.env.PORT || 5000;
-
-// Routes
-app.use('/api/sports', sportRoutes);
-
-// Middleware
+app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:5173", "http://localhost:5174"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization","authToken"]
 }));
+
+app.use("/api/sports", sportRoutes);
+
+app.use("/uploads", express.static("uploads"));
+
+const port = process.env.PORT || 5000;
+app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+// Middleware
 
 // JSON body parser with 10MB limit
 app.use(express.json({ limit: '10mb' }));
+
+// Routes
+app.use('/api/sports', sportRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/sports-club", {
@@ -45,19 +52,7 @@ function generateJWT(payload) {
 }
 
 // Middleware to protect routes (Authentication)
-function authenticate(req, res, next) {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized: No token provided" });
-
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        req.userId = decoded.id;
-        next();
-    } catch (err) {
-        console.error("JWT verification error:", err);
-        return res.status(401).json({ error: "Unauthorized: Invalid token" });
-    }
-}
+const authenticate = require("./authenticate");
 
 // Admin check middleware (Authorization)
 function isAdmin(req, res, next) {
@@ -233,14 +228,15 @@ app.put("/api/admin/requests/approve/:id", authenticate, isAdmin, async (req, re
     }
 });
 
-app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res) => {
+app.put("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, res) => {
     try {
         const request = await AdminRequest.findById(req.params.id);
         if (!request) return res.status(404).json({ error: "Admin request not found" });
 
-        await request.deleteOne();
+        request.status = "rejected";
+        await request.save();
 
-        res.json({ message: "Request rejected and deleted successfully" });
+        res.json({ message: "Request rejected successfully." });
     } catch (err) {
         console.error("Error rejecting admin request:", err);
         res.status(500).json({ error: "Failed to reject request" });
@@ -248,9 +244,15 @@ app.delete("/api/admin/requests/reject/:id", authenticate, isAdmin, async (req, 
 });
 
 // --- Test Route ---
-app.get("/api/message", (req, res) => {
+app.get("/api/message", (_ , res) => {
     res.json({ message: "Hello from the backend!" });
 });
+
+const trackRoutes = require('./routes/trackroute');
+app.use('/api', trackRoutes);
+
+// ✅ Export middleware for external use (like in trackroute.js)
+module.exports = { authenticate };
 
 // Start Server
 app.listen(port, () => {

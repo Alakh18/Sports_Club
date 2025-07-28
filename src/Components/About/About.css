@@ -4,6 +4,7 @@
   background-color: #fffef6;
   min-height: 100vh;
   color: #2c2c2c;
+  overflow-x: hidden;
 }
 
 /* Sidebar */
@@ -88,6 +89,7 @@
 }
 
 /* Responsive Layout */
+/* Tablets and below */
 @media (max-width: 768px) {
   .about-docs {
     flex-direction: column;
@@ -100,9 +102,55 @@
     border-right: none;
     border-bottom: 1px solid #e0e0e0;
     padding: 20px;
+    box-shadow: none;
   }
 
   .about-content {
     padding: 30px 20px;
+  }
+
+  .about-content h1 {
+    font-size: 1.9rem;
+  }
+
+  .about-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Very small screens (phones and narrow devices) */
+@media (max-width: 480px) {
+  .about-sidebar {
+    padding: 16px;
+  }
+
+  .about-sidebar li {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .about-content {
+    padding: 24px 16px;
+  }
+
+  .about-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .about-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .about-content section {
+    margin-bottom: 40px;
   }
 }

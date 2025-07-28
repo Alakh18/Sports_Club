@@ -24,10 +24,18 @@ function Header() {
   };
 
   // Close dropdown if clicked outside
+  const navRef = useRef(null);
+
   useEffect(() => {
     const handler = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        navRef.current &&
+        !navRef.current.contains(e.target)
+      ) {
         setDropdownOpen(false);
+        setMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -48,7 +56,10 @@ function Header() {
             ☰
           </button>
 
-          <nav className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}>
+          <nav
+            className={`header__nav ${menuOpen ? "header__nav--open" : ""}`}
+            ref={navRef}
+          >
             <a
               href=""
               className="header__nav-link"
@@ -124,7 +135,7 @@ function Header() {
               </Link>
             )}
 
-            {!user ? (
+            {!user && (
               <>
                 <button
                   className="cta small"
@@ -139,37 +150,44 @@ function Header() {
                   Sign Up
                 </button>
               </>
-            ) : (
-              <div className="profile-dropdown" ref={dropdownRef}>
-                <div
-                  className="profile-icon"
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  title={user.admission || "Profile"}
-                >
-                  {user.profileImage ? (
-                    <img src={user.profileImage} alt="Profile" />
-                  ) : (
-                    <span>{(user.admission || "U").charAt(0)}</span>
-                  )}
-                </div>
-
-                {dropdownOpen && (
-                  <div className="dropdown-menu">
-                    <Link
-                      to="/profile"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      Update Profile
-                    </Link>
-                    <button onClick={handleLogout} className="dropdown-item">
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
             )}
           </nav>
+
+          {user && (
+            <div className="profile-container" ref={dropdownRef}>
+              <div
+                className="profile-icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDropdownOpen(!dropdownOpen);
+                }}
+                title={user.admission || "Profile"}
+              >
+                {user.profileImage ? (
+                  <img src={user.profileImage} alt="Profile" />
+                ) : (
+                  <span>{(user.admission || "U").charAt(0)}</span>
+                )}
+              </div>
+
+              <div
+                className={`dropdown-menu ${
+                  dropdownOpen ? "dropdown-menu--open" : ""
+                }`}
+              >
+                <Link
+                  to="/profile"
+                  className="dropdown-item"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Update Profile
+                </Link>
+                <button onClick={handleLogout} className="dropdown-item">
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 

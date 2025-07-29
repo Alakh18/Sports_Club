@@ -2,7 +2,10 @@
   "name": "react-essentials-start",
   "version": "0.0.0",
   "scripts": {
-    "dev": "concurrently \"vite\" \"node server/index.js\"",
+   
+  "dev": "concurrently \"vite\" \"node ../../backend/server/index.js\""
+
+,
     "build": "vite build",
     "preview": "vite preview"
   },

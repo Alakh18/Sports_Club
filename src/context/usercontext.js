@@ -35,7 +35,7 @@ function UserProvider({ children }) {
   const login = async (admission, password) => {
     try {
       const res = await axios.post(
-        "/api/auth/login",
+        "https://sports-club-xi.vercel.app/api/auth/login",
         { admission, password },
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ function UserProvider({ children }) {
   const signup = async (admission, email, password) => {
     try {
       const res = await axios.post(
-        "/api/auth/signup",
+        "https://sports-club-xi.vercel.app/api/auth/signup",
         { admission, email, password },
         { withCredentials: true }
       );
@@ -80,7 +80,7 @@ function UserProvider({ children }) {
 
   const logout = async () => {
     try {
-      await axios.post("/api/auth/logout");
+      await axios.post("https://sports-club-xi.vercel.app/api/auth/logout");
       setUser(null);
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("authToken");

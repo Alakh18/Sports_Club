@@ -17,7 +17,7 @@ import Admin from "./Components/Admin/Admin.jsx";
 
 function App() {
   useEffect(() => {
-    fetch("https://sports-club.onrender.com//api/sports")
+    fetch("https://sports-club.onrender.com/api/sports")
       .then((res) => res.json())
       .then((data) => console.log(data.message));
   }, []);

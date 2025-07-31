@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://sports-club.onrender.com/',
+        target: 'https://sports-club.onrender.com',
         changeOrigin: true,
         secure: false,
       },

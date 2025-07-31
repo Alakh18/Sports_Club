@@ -19,7 +19,7 @@ export default function Sports() {
   const isLoggedIn = !!localStorage.getItem("authToken");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/sports")
+    fetch("https://sports-club.onrender.com//api/sports")
       .then((res) => res.json())
       .then((data) => {
         const matchedSport = data.find(

@@ -51,7 +51,7 @@ const Admin = () => {
       console.log("Frontend sending payload:", eventPayload); // <-- KEEP THIS LINE
 
       const res = await fetch(
-        `http://localhost:5000/api/sports/${selectedSport}/events`,
+        `https://sports-club.onrender.com//api/sports/${selectedSport}/events`,
         {
           method: "POST",
           headers: {
@@ -94,7 +94,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/sports");
+        const res = await fetch("https://sports-club.onrender.com//api/sports");
         const data = await res.json();
         setSports(data);
       } catch (err) {
@@ -108,7 +108,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/admin/requests", {
+        const res = await fetch("https://sports-club.onrender.com//api/admin/requests", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -135,7 +135,7 @@ const Admin = () => {
 
   const handleApprove = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/requests/approve/${id}`, {
+      await fetch(`https://sports-club.onrender.com//api/admin/requests/approve/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -151,7 +151,7 @@ const Admin = () => {
 
   const handleDecline = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/admin/requests/reject/${id}`, {
+      await fetch(`https://sports-club.onrender.com//api/admin/requests/reject/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +177,7 @@ const Admin = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/sports/${sportId}/events`
+        `https://sports-club.onrender.com//api/sports/${sportId}/events`
       );
       const data = await res.json();
       setEvents(data.events || []);
@@ -192,7 +192,7 @@ const Admin = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/sports/${selectedSport}/events/${eventId}`,
+        `https://sports-club.onrender.com//api/sports/${selectedSport}/events/${eventId}`,
         {
           method: "DELETE",
           headers: {
@@ -222,7 +222,7 @@ const Admin = () => {
   const handleSaveEdit = async () => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/sports/${selectedSport}/events/${editingEvent._id}`,
+        `https://sports-club.onrender.com//api/sports/${selectedSport}/events/${editingEvent._id}`,
         {
           method: "PUT",
           headers: {

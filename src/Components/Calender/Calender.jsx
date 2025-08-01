@@ -17,7 +17,7 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("/api/auth/me", {
+        const res = await axios.get("https://sports-club.onrender.com/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUser(res.data.user);
@@ -34,7 +34,7 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("/api/sports");
+        const res = await axios.get("https://sports-club.onrender.com/api/sports");
         const allEvents = res.data.flatMap((sport) =>
           sport.events.map((event) => ({
             ...event,
@@ -86,7 +86,7 @@ const CalendarPage = () => {
   const handleTrack = async (event) => {
     try {
       const res = await axios.post(
-        "/api/track",
+        "https://sports-club.onrender.com/api/track",
         {
           event: {
             eventName: event.eventName || event.name,
@@ -135,13 +135,13 @@ const CalendarPage = () => {
             return;
         }
 
-      const res = await axios.delete("/api/track", {
+      const res = await axios.delete("https://sports-club.onrender.com/api/track", {
         headers: { Authorization: `Bearer ${token}` },
         data: { event: eventToSend },
       });
 
       // Update state by refetching user data for consistency
-      const userRes = await axios.get("/api/auth/me", {
+      const userRes = await axios.get("https://sports-club.onrender.com/api/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTrackedEvents(userRes.data.user.trackedEvents || []);

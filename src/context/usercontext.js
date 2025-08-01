@@ -16,7 +16,7 @@ function UserProvider({ children }) {
           return;
         }
 
-        const res = await axios.get("/api/users/me", {
+        const res = await axios.get("https://sports-club.onrender.com/api/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);

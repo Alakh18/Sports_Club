@@ -161,7 +161,10 @@ app.put("/api/users/profile", authenticate, async (req, res) => {
 
         const { email, password, ...otherProfileData } = req.body;
 
-        await user.updateProfile(otherProfileData);
+        // ✅ Update profile fields manually (includes profileImage)
+        Object.keys(otherProfileData).forEach(key => {
+            user[key] = otherProfileData[key];
+        });
 
         if (email) user.email = email;
         if (password) user.password = password;
@@ -175,6 +178,7 @@ app.put("/api/users/profile", authenticate, async (req, res) => {
         res.status(500).json({ error: "Failed to update profile" });
     }
 });
+
 
 // --- ADMIN REQUEST SYSTEM ---
 

@@ -23,10 +23,15 @@ function Profile() {
   const [adminRequestSent, setAdminRequestSent] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({ ...prev, ...user }));
-    }
-  }, [user]);
+  if (user) {
+    setFormData(prev => ({
+      ...prev,
+      ...user,
+      profileImage: prev.profileImage || user.profileImage
+    }));
+  }
+}, [user]);
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

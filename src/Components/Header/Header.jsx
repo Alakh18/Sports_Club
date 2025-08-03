@@ -46,7 +46,7 @@ function Header() {
     <>
       <header className="header" id="header">
         <div className="header__container">
-          <div className="header__logo">🏆 SVNIT Sports Club</div>
+          <div className="header__logo"> ATHLETIC QUARTERS</div>
 
           <button
             className="header__toggle-button"

@@ -1,85 +1,97 @@
+/* Section styling */
 .hero.bright-hero {
   background: #fefae0;
-  padding: 60px 20px;
-  min-height: 50vh;
-  text-align: center;
+  padding: 30px 15px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-.hero.bright-hero *,
-.hero__content * {
-  max-width: 100%;
-  box-sizing: border-box;
-  word-break: break-word;
-}
-
+/* Main container with image */
 .hero__content {
-  max-width: 700px;
+  position: relative;
   width: 100%;
-  margin: auto;
-  padding: 0 15px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  max-width: 900px;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
+/* Full image shown with natural height */
+.hero__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* ✅ Overlay at bottom of image */
+.hero__overlay-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem;
+  color: #fff;
+  
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Typography */
 .hero__title {
-  font-size: 2.8rem;
-  color: var(--primary);
+  font-size: 2.2rem;
   font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .hero__subtitle {
-  font-size: 1.2rem;
-  color: #444;
-  line-height: 1.6;
-  font-weight: 400;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
-/* Tablets */
+/* CTA Button */
+.cta {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #ff9900;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta:hover {
+  background-color: #e68900;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .hero__title {
-    font-size: 2.2rem;
-  }
-
-  .hero__subtitle {
-    font-size: 1.05rem;
-  }
-}
-
-/* Phones */
-@media (max-width: 576px) {
-  .hero.bright-hero {
-    padding: 40px 15px;
-    min-height: 45vh;
-  }
-
   .hero__title {
     font-size: 1.8rem;
   }
 
   .hero__subtitle {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
 }
 
-/* Very small phones (320px–375px) */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .hero__title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .hero__subtitle {
+    font-size: 0.95rem;
+  }
+
+  .cta {
     font-size: 0.9rem;
-    line-height: 1.5;
   }
 }
+.hero__overlay-bottom {
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+

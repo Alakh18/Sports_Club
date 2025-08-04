@@ -56,7 +56,7 @@ function Profile() {
 
     try {
       const token = localStorage.getItem("authToken");
-      await fetch("/api/users/profile", {
+      await fetch("https://sports-club.onrender.com/api/users/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ function Profile() {
 
   try {
     const token = localStorage.getItem("authToken");
-    const response = await fetch("/api/request-admin", {
+    const response = await fetch("https://sports-club.onrender.com/api/request-admin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
